@@ -1,0 +1,123 @@
+{% extends 'NYRP/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h1>
+					New York Regents Prep!
+				</h1>
+			</div>
+			<p>
+				A new way to prepare for the regents exams! Whether it's Chemistry, Physics, or History, study at your own pace with practice questions in an easy to use format! Customize the years and units for each subject to get the practice that's custom tailored for your needs. Receive feedback about what areas you could use more work on!
+			</p>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Chemistry Thumbnail" src="{% static 'NYRP/chem.jpg'%}" />
+						<div class="caption">
+							<h3>
+								Chemistry
+							</h3>
+							<p>
+								Practice recent regents exams, or study by unit!
+							</p>
+							<p>
+								<a class="btn btn-primary" href="{% url 'prep' 'Chemistry' %}">Start</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="U.S. History &amp; Government" src="{% static 'NYRP/USAhist.jpg' %}" />
+						<div class="caption">
+							<h3>
+								U.S. History &amp; Government
+							</h3>
+							<p>
+								Practice recent regents exams, or study by Period!
+							</p>
+							<p>
+								<a class="btn btn-primary" href="{% url 'prep' 'US_History_And_Government'%}">Start</a>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Algebra I Thumbnail" src="{% static 'NYRP/alg.png' %}" />
+						<div class="caption">
+							<h3>
+								Algebra I
+							</h3>
+							<p>
+								Practice recent regents exams, or study by unit!
+							</p>
+							<p>
+								<!--Usually an a tag, but a disabled button for now-->
+								<button disabled class="btn btn-primary"  href="{% url 'prep' 'Algebra_I'%}">Start</button>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Algebra II Thumbnail" src="{% static 'NYRP/alg2.jpg' %}" />
+						<div class="caption">
+							<h3>
+								Algebra II (Common Core)
+							</h3>
+							<p>
+								Practice recent regents exams, or study by unit!
+							</p>
+							<p>
+								<!--Usually an a tag, but a disabled button for now-->
+								<button disabled class="btn btn-primary" href="{% url 'prep' 'Algebra_II' %}">Start</button>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Global History Thumbnail" src="{% static 'NYRP/worldhist.jpg' %}" />
+						<div class="caption">
+							<h3>
+								Global History &amp; Geography
+							</h3>
+							<p>
+								Practice recent regents exams, or study by unit!
+							</p>
+							<p>
+								<!--Usually an a tag, but a disabled button for now-->
+								<button disabled class="btn btn-primary" href="{% url 'prep' 'Global_History_And_Geography' %}">Start</button>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="thumbnail">
+						<img alt="Physics Thumbnail"  src="{% static 'NYRP/phys.png' %}" />
+						<div class="caption">
+							<h3>
+								Physics
+							</h3>
+							<p>
+								Practice recent regents exams, or study by unit!
+							</p>
+							<p>
+								<!--Usually an a tag, but a disabled button for now-->
+								<button disabled class="btn btn-primary" href="{% url 'prep' 'Physics' %}">Start</button>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<div><h1>Find a bug? Want a new feature? Leave a Message!</h1></div>-->
+		</div>
+	</div>
+</div>
+{% endblock %}

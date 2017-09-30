@@ -1,0 +1,90 @@
+{% extends 'NYRP/base.html' %}
+{% load static %}
+{% block content %}
+<!--Local styling to center the diagrams-->
+<style>
+img {
+    display: block;
+    margin: 0 auto;
+}
+</style>
+<body onload = "setButtons('{{correct}}', '{{prev_ans}}', '{{index }}', '{{total}}');">
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<a class="btn" data-toggle="modal" data-target="#modal" href="{% url 'report_question' %}" style="float: right;">Submit A Problem With This Question</a>
+			<h3>Question {{index }} of {{total}}</h3>
+			<div class="progress">
+  				<div id = "progress_bar" class="progress-bar progress-bar-success progress-bar-striped active" style="width:{{percent}}%">{{percent}}%</div>
+			</div>
+			<form id='answerForm2' method='post'>
+				{% csrf_token %}
+				<button style="float: right;" type="submit" class="btn btn-danger" name="skip" id="skip">Skip Question</button>
+			</form>
+			{% autoescape off %}
+			<h3 class="text-center">
+				{{question.question}}
+			</h3>
+			{% if question.diagram %}
+				<img src="{{ question.diagram.url }}" alt="Diagram">
+			{% endif %}
+			<div class="centered">
+				<table style="margin-left:auto;margin-right:auto;">
+				  <tr>
+					<td><button class="btn" id= "a" onclick="check_button('a')">A</button><font color="black" id="a_text">{{question.A}}</font></td>
+				  </tr>
+				  <tr>
+					<td><button class="btn" id= "b" onclick="check_button('b')">B</button><font color="black" id="b_text">{{question.B}}</font></td>
+				  </tr>
+				  <tr>
+					<td><button class="btn" id= "c" onclick="check_button('c')">C</button><font color="black" id="c_text">{{question.C}}</font></td>
+				  </tr>
+				  <tr>
+					<td><button class="btn" id= "d" onclick="check_button('d')">D</button><font color="black" id="d_text">{{question.D}}</font></td>
+				  </tr>
+					<tr>
+						<td>
+							<form id='answerForm' method='post'>
+								{% csrf_token %}
+								<input  type="hidden" id="answer" name="answer" value=""/>
+								<button type='submit' id="submit" name="next"   class="btn btn-primary btn-block">Submit</button>
+							</form>
+						</td>
+					</tr>
+				</table>
+			</div>
+			{% endautoescape %}
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<button class="btn btn-info" onclick="open_pdf('{% static 'ChemRef.pdf' %}')">View Reference Table</button>
+
+			<form id='answerForm3' method='post'>
+				{% csrf_token %}
+				<button style="float: right;" type="submit" class="btn btn-warning" name="end" >End Test Early and View Results</button>
+			</form>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+</div>
+
+<!--Pop up if the ser want's so submit a bug with the question-->
+<div class="modal fade" id="modal"></div>
+<script>
+$('#modal').on('show.bs.modal', function (event) {
+    var modal = $(this)
+    $.ajax({
+        url: "{% url 'report_question' %}",
+        context: document.body
+    }).done(function(response) {
+        modal.html(response);
+    });
+})
+</script>
+
+</body>
+{% endblock %}
