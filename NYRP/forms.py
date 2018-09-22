@@ -2,12 +2,12 @@ from django import forms
 from django.forms import ModelForm
 from .models import QuestionBug
 
-'''
-These constants define the units for each topic, as well as
-which exams there are to select from. Chemistry has a small
-populated database, United States History and Government is
-just here as a proof of concept
-'''
+
+# These constants define the units for each topic, as well as
+# which exams there are to select from. Chemistry has a small
+# populated database, United States History and Government is
+# just here as a proof of concept
+
 # Chemistry
 CHEM_UNITS = (
 	("1", "1: The Atom"),
@@ -49,33 +49,34 @@ USHG_EXAMS = (
 	("August 2017", "August 2017"),
 )
 
-'''
-Algebra I, Algebra 2, Global History and Geography,
-and Physics are not implemented yet.
-'''
-ALG1_UNITS = (("",""),)
-ALG1_EXAMS = (("",""),)
-ALG2_UNITS = (("",""),)
-ALG2_EXAMS = (("",""),)
-GHGE_UNITS = (("",""),)
-GHGE_EXAMS = (("",""),)
-PHYS_UNITS = (("",""),)
-PHYS_EXAMS = (("",""),)
-ERRO_UNITS = (("",""),)
-ERRO_EXAMS = (("",""),)
 
-'''
-This is the form that gets the user submits to get questions. The user can
-either selection questions based on the exam on which the questions appeared
-or pick questions based on their topic.
-Fields:
+# Algebra I, Algebra 2, Global History and Geography,
+# and Physics are not implemented yet.
+ALG1_UNITS = (("", ""),)
+ALG1_EXAMS = (("", ""),)
+ALG2_UNITS = (("", ""),)
+ALG2_EXAMS = (("", ""),)
+GHGE_UNITS = (("", ""),)
+GHGE_EXAMS = (("", ""),)
+PHYS_UNITS = (("", ""),)
+PHYS_EXAMS = (("", ""),)
+ERRO_UNITS = (("", ""),)
+ERRO_EXAMS = (("", ""),)
+
+
+class SelectorForm(forms.Form):
+	"""
+	This is the form that the user submits to get questions. The user can
+	either select questions based from a particular exam, or pick questions based on their topic.
+
+	Fields:
 	units - A multiple choice selection for picking questions based on their unit
 	exams - A multiple choice selection for picking questions based on which exam they appeared on
-'''
-class SelectorForm(forms.Form):
+	"""
+
 	# Both of these fields are overwritten in __init__
-	units = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=CHEM_UNITS,required=False)
-	exams = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=CHEM_EXAMS,required=False)
+	units = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHEM_UNITS, required=False)
+	exams = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHEM_EXAMS, required=False)
 	# This could possibly be implemented in the future to act as a cap so
 	# the user doesn't get a ridiculous amount of questions they don't want
 	# num_qs= forms.IntegerField(widget=forms.NumberInput, min_value=1)
@@ -88,17 +89,19 @@ class SelectorForm(forms.Form):
 		self.subject = kwargs.pop('subject')
 		super(SelectorForm, self).__init__(*args, **kwargs)
 		# Picking the correct exam/units based on the subject
-		self.fields['units'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=eval(self.subject + "_UNITS"), required=False)
-		self.fields['exams'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=eval(self.subject + "_EXAMS"), required=False)
+		self.fields['units'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+														 choices=eval(self.subject + "_UNITS"), required=False)
+		self.fields['exams'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+														 choices=eval(self.subject + "_EXAMS"), required=False)
 
 	# Checking the form for errors
 	def clean(self):
 		cleaned_data = super(SelectorForm, self).clean()
 		units = cleaned_data.get("units")
 		exams = cleaned_data.get("exams")
-		# Adding errors to the form in the user wanted to get questions
+		# Adding errors to the form if the user wanted to get questions
 		# by the unit and didn't select a unit, or if they wanted to get
-		# questions by the exam and didn't select the exam.
+		# questions by the exam and didn't select the exam button.
 		if "by_unit" in self.req:
 			if len(units) < 1:
 				self.add_error('units', "unit")
@@ -107,10 +110,12 @@ class SelectorForm(forms.Form):
 				self.add_error('exams', "exam")
 		return self.cleaned_data		# Returning the cleaned data
 
-"""
-Model for used to get user bug reports on the questions
-"""
+
 class QuestionBugForm(ModelForm):
+	"""
+	Model for used to get user bug reports on the questions
+	"""
+
 	class Meta:
 		model = QuestionBug
 		fields = ['bug_choices', 'description']

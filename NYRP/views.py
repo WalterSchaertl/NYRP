@@ -6,19 +6,29 @@ from django.conf import settings
 from .models import Question, Selector
 from django.contrib import messages
 
-'''
-The view for the index with different subjects to pick from
-'''
+
 def index(request):
+	"""
+	The view for the index with different subjects to pick from.
+
+	:param request:
+	:return:
+	"""
 	return render(request, 'NYRP/index.html')
 
-'''
-The view for selecting questions
-Subject:	The subject the user wants, specified by the url
-'''
+
 def prep(request, subject):
+	"""
+	The view for selecting questions
+
+	:param request:
+	:param subject: The subject the user wants, specified by the url
+	:return:
+	"""
+
 	# Changing URL friendly parameter to database parameter and template title
 	bd_subject = "ERRO"		# If none of the subjects match it, there was an error
+
 	# Match the subject up with what the database uses
 	for i in range(0, len(settings.SUBJECTS)):
 		if subject.replace("_", " ").lower() == settings.SUBJECTS[i][1].lower():
@@ -29,31 +39,38 @@ def prep(request, subject):
 	if request.method == 'POST':
 		# Create the form based on the request and subject (see forms.py)
 		form = SelectorForm(request.POST, req=request.POST, subject=bd_subject)
+
 		# If the form is valid and filled out correctly
 		if form.is_valid():
 			# Creates a selector object to get questions by
-			select = Selector.objects.create(index = 0, subject=bd_subject)
+			select = Selector.objects.create(index=0, subject=bd_subject)
 			# Populates the questions based on the user form and how it was submitted
-			select.populate_questions(form.cleaned_data.get('units'), form.cleaned_data.get('exams'), "by_unit" in request.POST)
+			select.populate_questions(form.cleaned_data.get('units'),
+									  form.cleaned_data.get('exams'), "by_unit" in request.POST)
 			# Store the primary key for the selector in the session cookies
 			request.session['sel_pk'] = select.pk
-			# Alerts the user if there arn't any questions for what they selected and retry
+			# Alerts the user if there aren't any questions for what they selected and retry
 			if select.questions.count() < 1:
-				messages.error(request, "Oops! They're arn't any questions with those criteria!  Go try out Chemistry!")
+				messages.error(request, "Oops! They're aren't any questions with those criteria!")
 				form = SelectorForm(request.POST, req=request.POST, subject=bd_subject)
-				return render(request, 'NYRP/prep.html', {'form': form, 'title':subject.replace("_", " ")})
+				return render(request, 'NYRP/prep.html', {'form': form, 'title': subject.replace("_", " ")})
 			# If everything was a success, start displaying the questions
 			return redirect('question')
 	# Otherwise, show them a form
 	else:
 		form = SelectorForm(req=request.POST, subject=bd_subject)
-	#Adding the form and the title to the context
-	return render(request, 'NYRP/prep.html', {'form':form, 'title':subject.replace("_", " ")})
+	# Adding the form and the title to the context
+	return render(request, 'NYRP/prep.html', {'form': form, 'title': subject.replace("_", " ")})
 
-'''
-The view that handles the questions
-'''
+
 def question(request):
+	"""
+	The view that handles the questions.
+
+	:param request:
+	:return:
+	"""
+
 	# Get the selector from the cookies
 	select = Selector.objects.get(pk=request.session.get('sel_pk'))
 	# Get the next question
@@ -64,7 +81,7 @@ def question(request):
 	if question is None:
 		return redirect('view_results')
 
-	# If the user is submitting a quesion
+	# If the user is submitting a question
 	if request.method == "POST":
 		# Answered correctly previously, and the user has the option to move on
 		if "continue" == request.POST.get('answer'):
@@ -91,7 +108,7 @@ def question(request):
 			select.record += "" + str(question.pk) + " False " + select.choice_history + ", "
 			select.correct = True
 			select.save()
-		# Answerd incorrectly
+		# Answered incorrectly
 		elif request.POST.get('answer') != "":
 			select.choice_history += request.POST.get('answer')
 			select.correct = False
@@ -99,22 +116,25 @@ def question(request):
 		return redirect('question')
 
 	# Context used for the template
-	context = {"question"	: question,									# The question
-				"total"		: total_q,									# The total number of questions
-				"index"		: select.index + 1,							# Where the user is in that list
-				"correct"	: select.correct,							# If they're previous answer was correct
-				"prev_ans"	: select.choice_history,						# What they answered previously
-				"percent"	: int(round(select.index / total_q * 100))}	# What percent they've done
+	context = {"question"	: question,									 # The question
+				"total"		: total_q,									 # The total number of questions
+				"index"		: select.index + 1,							 # Where the user is in that list
+				"correct"	: select.correct,							 # If they're previous answer was correct
+				"prev_ans"	: select.choice_history,					 # What they answered previously
+				"percent"	: int(round(select.index / total_q * 100))}	 # What percent they've done
 
 	return render(request, "NYRP/question.html", context)
 
-'''
-The view to see the results of the tests
-'''
+
 def view_results(request):
+	"""
+	The view to see the results of the tests.
+	:param request:
+	:return:
+	"""
 	# Getting the selector
 	select = Selector.objects.get(pk=request.session.get('sel_pk'))
-	record = [x.strip(' ') for x in select.record[:len(select.record) - 2 ].split(',')]
+	record = [x.strip(' ') for x in select.record[:len(select.record) - 2].split(',')]
 	total = len(record)		# The total number of questions
 	total_missed = 0		# Total questions missed
 	trys = [0, 0, 0, 0]		# Holds the data of number or questions answered on the 1st, 2ed, 3rd, and 4th try
@@ -166,19 +186,25 @@ def view_results(request):
 				"num_skiped_by_unit": num_skiped_by_unit}
 	return render(request, "NYRP/result.html", context)
 
-'''
-#For debugging only, makes question models in large groups
-'''
+
 def make_qs(request):
-	for i in range(0,20):
+	"""
+	For debugging only, makes question models in large groups
+	:param request:
+	:return:
+	"""
+	for i in range(0, 20):
 		question = Question.objects.create(subject="CHEM", month="January", year=2017, unit=12)
 		question.save()
 	return HttpResponse("made.")
 
-'''
-View for submitting a bug report
-'''
+
 def question_bug_report(request):
+	"""
+	View for submitting a bug report.
+	:param request:
+	:return:
+	"""
 	if request.method == "POST":
 		form = QuestionBugForm(request.POST)
 		if form.is_valid():
@@ -188,4 +214,4 @@ def question_bug_report(request):
 			return redirect('question')
 	else:
 		form = QuestionBugForm()
-	return render(request, "NYRP/question_problem.html", {"form":form})
+	return render(request, "NYRP/question_problem.html", {"form": form})

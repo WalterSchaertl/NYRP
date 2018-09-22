@@ -8,21 +8,24 @@ QUESTION_BUG_CHOICES = (("1", "This question doesn't belong in this topic."),
 						("3", "The given answer is incorrect."),
 						("4", "There is a formatting/typo error in the question."),
 						("5", "Other (please specify below)."))
-'''
-A Question object has:
-Question: 			Text: A string that is the question
-Answers Choices: 	Text: 5 different options to answer (A-E)
-Ans					Text: The correct answer to the question
-Subject: 			Text: The subject it belongs to
-Month:				Text: The Month is was published
-Year:				Int:  The year it was published
-Unit:				Int:  The unit number of the quesion
-Group				Foreign Key: If this question belongs to a set, the questions will all share a group
-Hint				Foreign Key: A relation to a hint for the question
-Diagram:			File: A PNG file that goes with the question
-Group, Hint, and Diagram are not applicable to all questions
-'''
+
+
 class Question(models.Model):
+	"""
+	The model for a question object, a Question object has:
+	Question: 			Text: A string that is the question
+	Answers Choices: 	Text: 5 different options to answer (A-E)
+	Ans					Text: The correct answer to the question
+	Subject: 			Text: The subject it belongs to
+	Month:				Text: The Month is was published
+	Year:				Int:  The year it was published
+	Unit:				Int:  The unit number of the quesion
+	Group				Foreign Key: If this question belongs to a set, the questions will all share a group
+	Hint				Foreign Key: A relation to a hint for the question
+	Diagram:			File: A PNG file that goes with the question
+	Group, Hint, and Diagram are not applicable to all questions
+	"""
+
 	question = models.CharField(max_length=500, blank=True)
 	A   	 = models.CharField(max_length=200, blank=True)
 	B		 = models.CharField(max_length=200, blank=True)
@@ -40,12 +43,15 @@ class Question(models.Model):
 
 	# How the question is shown in the admin view
 	def __str__(self):
-		return str(self.subject) + " : " + str(self.unit) + " : " + str(self.year) + " : " + str(self.month)[0:3] + " : " + str(self.question)
+		return str(self.subject) + " : " + str(self.unit) + " : " + str(self.year) + " : " +\
+			   str(self.month)[0:3] + " : " + str(self.question)
 
-'''
-A Hint object that can go with questions
-'''
+
 class Hint(models.Model):
+	"""
+	A Hint object that can go with questions
+	"""
+
 	hint1 = models.CharField(max_length=200, default="")
 	hint2 = models.CharField(max_length=200, default="")
 	hint3 = models.CharField(max_length=200, default="")
@@ -53,24 +59,29 @@ class Hint(models.Model):
 	def __str___(self):
 		return "Hints for " + str(Question.objects.get(hint=self))
 		
-'''
-An model that is related to a set of questions
-Name:	Text: The name of the group
-'''
+
 class Group(models.Model):
+	"""
+	An model that is related to a set of questions
+	Name:	Text: The name of the group
+	"""
+
 	name = models.CharField(max_length=200, default="")
+
 	def __str__(self):
 		return "This group contains questions " + str(Question.objects.filter(group=self))
 
-'''
-Object used to create a list of questions that pertain to the users selection
-'''
+
 class Selector(models.Model):
+	"""
+	Object used to create a list of questions that pertain to the users selection
+	"""
+
 	# Used to select the questions and keep track of the current one
 	subject = models.CharField(max_length=100, default="ERRO")		# The subject the user chose
-	index = models.IntegerField(default = 0)						# Used to iterate through the questions
+	index = models.IntegerField(default=0)							# Used to iterate through the questions
 	questions = models.ManyToManyField(Question)					# All the questions matching the user's criteria
-	pri_keys = models.CharField(max_length=1000,default="")			# A list of the primary keys in questions
+	pri_keys = models.CharField(max_length=1000, default="")		# A list of the primary keys in questions
 
 	# Used to track the user's record
 	correct = models.BooleanField(default=False)		# If the user answer the current question correctly
@@ -79,16 +90,18 @@ class Selector(models.Model):
 	# Stored as a string, but can be cast to a list of [int, boolean, string]
 	record = models.TextField(default="")
 
-	# Creates relationships to the appropriate questions
-	# Params:
-	#	units   - the units the user wants to take
-	#	exams   - the exams the user wants to take
-	#	by_unit - if the user choose to get questions by unit or not
-	# by_unit is included because the user may have selected some exams, but
-	# changed their mind and selected questions by unit. The form will say the
-	# user selected both units and exams, so by_unit is included to check which
-	# submission button they clicked.
+	# TODO extra form validation so by_unit isn't needed
 	def populate_questions(self, units, exams, by_unit):
+		"""
+		Creates relationships to the appropriate questions. The parameter by_unit is included because the user may have
+		selected some exams, but changed their mind and selected questions by unit. The form will say the user
+		selected both units and exams, so by_unit is included to check which submission button they clicked.
+
+		:param units: the units the user wants to take
+		:param exams: the exams the user wants to take
+		:param by_unit: if the user choose to get questions by unit or not
+		"""
+
 		# If the user choose to get questions by unit, filter by unit
 		if by_unit:
 			self.questions = Question.objects.filter(subject=self.subject).filter(unit__in=units)
@@ -98,6 +111,7 @@ class Selector(models.Model):
 				month = exam[0:exam.index(" ")]
 				year = exam[exam.index(" ") + 1:]
 				# Adding each question that matches both the year and the month for each exam
+				# TODO refactor this
 				self.questions = self.questions.all() | Question.objects.filter(subject=self.subject).filter(year=year, month=month)
 
 		# Used for debugging to limit the number of questions
@@ -123,14 +137,15 @@ class Selector(models.Model):
 	def __str__(self):
 		return "Selector: " + str(self.pk)
 
-'''
-Used for users to submit bug reports on the questions
-Question:		The question the user finds fault with
-Bug Choices:	Options for errors with the question
-Description:	A description of the fault
-Time:			When the error occurred
-'''
+
 class QuestionBug(models.Model):
+	"""
+	Used for users to submit bug reports on the questions.
+	Question:		The question the user finds fault with
+	Bug Choices:	Options for errors with the question
+	Description:	A description of the fault
+	Time:			When the error occurred
+	"""
 	question = models.ForeignKey(Question)
 	bug_choices = models.CharField(max_length=1, choices=QUESTION_BUG_CHOICES, default="5")
 	description = models.TextField(blank=True)
@@ -138,6 +153,5 @@ class QuestionBug(models.Model):
 
 	# How the bug report will show up in the admin view
 	def __str__(self):
-		return "Bug: " + str(self.pk) + " with question " + str(self.question.pk) + ": " + str(self.get_bug_choices_display())
-
-
+		return "Bug: " + str(self.pk) + " with question " + str(self.question.pk) + \
+			   ": " + str(self.get_bug_choices_display())
