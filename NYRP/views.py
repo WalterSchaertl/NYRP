@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import loader
-from .forms import SelectorForm, QuestionBugForm
+from .forms import *
 from django.conf import settings
 from .models import Question, Selector
 from django.contrib import messages
@@ -11,8 +11,8 @@ def index(request):
 	"""
 	The view for the index with different subjects to pick from.
 
-	:param request:
-	:return:
+	:param request: A HTTPRequest object for the landing page
+	:return: A HTTPResponse object, the rendering of the index.html page
 	"""
 	return render(request, 'NYRP/index.html')
 
@@ -21,9 +21,9 @@ def prep(request, subject):
 	"""
 	The view for selecting questions
 
-	:param request:
+	:param request: A HTTPRequest object for the page to select questions
 	:param subject: The subject the user wants, specified by the url
-	:return:
+	:return: A HTTPResponse object, the rendering of the prep.html page with the question selection form
 	"""
 
 	# Changing URL friendly parameter to database parameter and template title
@@ -46,7 +46,8 @@ def prep(request, subject):
 			select = Selector.objects.create(index=0, subject=bd_subject)
 			# Populates the questions based on the user form and how it was submitted
 			select.populate_questions(form.cleaned_data.get('units'),
-									  form.cleaned_data.get('exams'), "by_unit" in request.POST)
+									  form.cleaned_data.get('exams'),
+									  "by_unit" in request.POST)
 			# Store the primary key for the selector in the session cookies
 			request.session['sel_pk'] = select.pk
 			# Alerts the user if there aren't any questions for what they selected and retry
@@ -67,8 +68,8 @@ def question(request):
 	"""
 	The view that handles the questions.
 
-	:param request:
-	:return:
+	:param request: A HTTPRequest object for the question view
+	:return: A HTTPResponse object, the rendering of the question.html page for each question
 	"""
 
 	# Get the selector from the cookies
@@ -126,23 +127,27 @@ def question(request):
 	return render(request, "NYRP/question.html", context)
 
 
+# TODO convert lists to dictionaries to improve readability
 def view_results(request):
 	"""
-	The view to see the results of the tests.
-	:param request:
-	:return:
+	The view to see the results, questions answered/skipped, percent correct, and missed by unit.
+
+	:param request: A HTTPRequest object for the results view
+	:return: A HTTPResponse object, the rendering of the result.html page with the results
 	"""
+
 	# Getting the selector
 	select = Selector.objects.get(pk=request.session.get('sel_pk'))
 	record = [x.strip(' ') for x in select.record[:len(select.record) - 2].split(',')]
+	num_units = len(eval(select.subject + "_UNITS"))
 	total = len(record)		# The total number of questions
 	total_missed = 0		# Total questions missed
 	trys = [0, 0, 0, 0]		# Holds the data of number or questions answered on the 1st, 2ed, 3rd, and 4th try
 	num_skipped = 0			# The number of questions skipped
 
-	unit_total			= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]		# Total number of questions per unit
-	num_miss_by_unit 	= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]		# Total number of questions missed by unit
-	num_skiped_by_unit	= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]		# Total number of questions skipped by unit
+	unit_total			= [0 for x in range(num_units)]  # Total number of questions per unit
+	num_miss_by_unit 	= [0 for x in range(num_units)]  # Total number of questions missed by unit
+	num_skiped_by_unit	= [0 for x in range(num_units)]  # Total number of questions skipped by unit
 
 	# For each question history in the records, provided at least one exists, compute the statistics
 	if str(record[0]) != "":
@@ -150,7 +155,7 @@ def view_results(request):
 			data = x.split(' ')
 			q_pk = data[0]												# The question
 			skipped = data[1]											# If it was skipped
-			if skipped != "True":										# If it wasn't skipped
+			if skipped == "False":										# If it wasn't skipped
 				answers = data[2]										# How it was answered
 			unit_total[Question.objects.get(pk=q_pk).unit - 1] += 1		# Tracking questions by unit
 
@@ -189,10 +194,9 @@ def view_results(request):
 
 def make_qs(request):
 	"""
-	For debugging only, makes question models in large groups
-	:param request:
-	:return:
+	For ease of database population, makes question models in large batches\
 	"""
+
 	for i in range(0, 20):
 		question = Question.objects.create(subject="CHEM", month="January", year=2017, unit=12)
 		question.save()
@@ -202,9 +206,11 @@ def make_qs(request):
 def question_bug_report(request):
 	"""
 	View for submitting a bug report.
-	:param request:
-	:return:
+
+	:param request: A HTTPRequest object for the results view
+	:return: A HTTPResponse object, the rendering of the question_problem.html page with the results
 	"""
+
 	if request.method == "POST":
 		form = QuestionBugForm(request.POST)
 		if form.is_valid():
