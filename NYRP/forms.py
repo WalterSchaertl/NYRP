@@ -118,4 +118,18 @@ class QuestionBugForm(ModelForm):
 
 	class Meta:
 		model = QuestionBug
-		fields = ['bug_choices', 'description']
+		fields = ["bug_choices", "description"]
+
+	def clean(self):
+		"""
+		Adds validation to the form. If the user gives "other" as a problem, they must
+		also provide a reason.
+
+		"""
+
+		cleaned_data = super(QuestionBugForm, self).clean()
+		description = cleaned_data.get("description")
+		bug_choice = cleaned_data.get("bug_choices")
+
+		if int(bug_choice) == 5 and description in [None, "", " "]:
+			self.add_error("description", "If selecting \"other\" as an option, please provide a description.")
