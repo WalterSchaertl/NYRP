@@ -10,4 +10,5 @@ urlpatterns = [
 	url(r'^results/$', views.view_results, name='view_results'),					# The results of the test
 	url(r'^make_qs/$', views.make_qs, name='make_qs'),								# Bulk creation of questions (debug only)
 	url(r'^report_question/$', views.question_bug_report, name='report_question'),  # Submitting a bug report
+	url(r'^error$', views.custom_error, name='custom_error')
 ]

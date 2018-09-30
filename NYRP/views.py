@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.template import loader
-from .forms import *
 from django.conf import settings
-from .models import Question, Selector
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+
+from .forms import *
+from .models import Question, Selector
 
 
 def index(request):
@@ -73,7 +74,10 @@ def question(request):
 	"""
 
 	# Get the selector from the cookies
-	select = Selector.objects.get(pk=request.session.get('sel_pk'))
+	try:
+		select = Selector.objects.get(pk=request.session.get('sel_pk'))
+	except ObjectDoesNotExist:
+		return redirect('custom_error')
 	# Get the next question
 	question = select.get_question()
 	# Get the total questions
@@ -137,7 +141,11 @@ def view_results(request):
 	"""
 
 	# Getting the selector
-	select = Selector.objects.get(pk=request.session.get('sel_pk'))
+	try:
+		select = Selector.objects.get(pk=request.session.get('sel_pk'))
+	except ObjectDoesNotExist:
+		return redirect('custom_error')
+
 	record = [x.strip(' ') for x in select.record[:len(select.record) - 2].split(',')]
 	num_units = len(eval(select.subject + "_UNITS"))
 	total = len(record)		# The total number of questions
@@ -212,12 +220,42 @@ def question_bug_report(request):
 	"""
 
 	if request.method == "POST":
+		# Getting the selector
+		try:
+			select = Selector.objects.get(pk=request.session.get('sel_pk'))
+		except ObjectDoesNotExist:
+			return redirect('custom_error')
+
 		form = QuestionBugForm(request.POST)
 		if form.is_valid():
 			bug = form.save(commit=False)
-			bug.question = Selector.objects.get(pk=request.session.get('sel_pk')).get_question()
+			bug.question = select.get_question()
 			bug.save()
 			return redirect('question')
 	else:
 		form = QuestionBugForm()
 	return render(request, "NYRP/question_problem.html", {"form": form})
+
+
+def custom_error(request):
+	"""
+	Django is currently handling the generic errors (500, 404). This is a custom error in the case that
+	a required cookie was not allowed, deleted, or malformed.
+
+	:param request: A HTTPRequest object for the client error view
+	:return: A HTTPResponse object, the rendering of the custom_error.html page with an error message
+	"""
+
+	if "sel_pk" not in request.session.keys():
+		error_message = "The session ID could not be obtained from the cookies. Make sure cookies are allowed " \
+						" and try selecting questions again."
+	elif type(request.session.get("sel_pk")) is not int:
+		error_message = "The session ID is malformed, please try selecting questions again."
+	else:
+		try:
+			Selector.objects.get(pk=request.session.get("sel_pk"))
+			error_message = "An unknown error has occurred."
+		except ObjectDoesNotExist:
+			error_message = "No data could be found for your session, please try selecting questions again."
+
+	return render(request, "NYRP/custom_error.html", {"code": 400, "message": error_message})
