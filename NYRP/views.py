@@ -15,7 +15,7 @@ def index(request):
 	:param request: A HTTPRequest object for the landing page
 	:return: A HTTPResponse object, the rendering of the index.html page
 	"""
-	return render(request, 'NYRP/index.html')
+	return render(request, "NYRP/index.html")
 
 
 def prep(request, subject):
@@ -37,7 +37,7 @@ def prep(request, subject):
 			# print("Title " + settings.SUBJECTS[i][1] + " with subject " + bd_subject)
 
 	# If the user submitted the form
-	if request.method == 'POST':
+	if request.method == "POST":
 		# Create the form based on the request and subject (see forms.py)
 		form = SelectorForm(request.POST, req=request.POST, subject=bd_subject)
 
@@ -46,23 +46,23 @@ def prep(request, subject):
 			# Creates a selector object to get questions by
 			select = Selector.objects.create(index=0, subject=bd_subject)
 			# Populates the questions based on the user form and how it was submitted
-			select.populate_questions(form.cleaned_data.get('units'),
-									  form.cleaned_data.get('exams'),
+			select.populate_questions(form.cleaned_data.get("units"),
+									  form.cleaned_data.get("exams"),
 									  "by_unit" in request.POST)
 			# Store the primary key for the selector in the session cookies
-			request.session['sel_pk'] = select.pk
+			request.session["sel_pk"] = select.pk
 			# Alerts the user if there aren't any questions for what they selected and retry
 			if select.questions.count() < 1:
 				messages.error(request, "Oops! They're aren't any questions with those criteria!")
 				form = SelectorForm(request.POST, req=request.POST, subject=bd_subject)
-				return render(request, 'NYRP/prep.html', {'form': form, 'title': subject.replace("_", " ")})
+				return render(request, "NYRP/prep.html", {"form": form, "title": subject.replace("_", " ")})
 			# If everything was a success, start displaying the questions
-			return redirect('question')
+			return redirect("question")
 	# Otherwise, show them a form
 	else:
 		form = SelectorForm(req=request.POST, subject=bd_subject)
 	# Adding the form and the title to the context
-	return render(request, 'NYRP/prep.html', {'form': form, 'title': subject.replace("_", " ")})
+	return render(request, "NYRP/prep.html", {"form": form, "title": subject.replace("_", " ")})
 
 
 def question(request):
@@ -75,21 +75,21 @@ def question(request):
 
 	# Get the selector from the cookies
 	try:
-		select = Selector.objects.get(pk=request.session.get('sel_pk'))
+		select = Selector.objects.get(pk=request.session.get("sel_pk"))
 	except ObjectDoesNotExist:
-		return redirect('custom_error')
+		return redirect("custom_error")
 	# Get the next question
 	question = select.get_question()
 	# Get the total questions
 	total_q = select.questions.count()
 	# If there are no more questions, go to results
 	if question is None:
-		return redirect('view_results')
+		return redirect("view_results")
 
 	# If the user is submitting a question
 	if request.method == "POST":
 		# Answered correctly previously, and the user has the option to move on
-		if "continue" == request.POST.get('answer'):
+		if "continue" == request.POST.get("answer"):
 			select.index += 1
 			select.choice_history = ""
 			select.correct = False
@@ -104,21 +104,21 @@ def question(request):
 			select.save()
 		# User ended the practice early
 		elif "end" in request.POST:
-			return redirect('view_results')
+			return redirect("view_results")
 		# User answer the question correctly (Will now be given the option to continue and remove skip)
-		elif question.ans.lower() == request.POST.get('answer'):
+		elif question.ans.lower() == request.POST.get("answer"):
 			# Adds a record for the question's pk, if it was skipped, and the sequence of answers entered
-			select.choice_history += request.POST.get('answer')
+			select.choice_history += request.POST.get("answer")
 			select.save()
 			select.record += "" + str(question.pk) + " False " + select.choice_history + ", "
 			select.correct = True
 			select.save()
 		# Answered incorrectly
-		elif request.POST.get('answer') != "":
-			select.choice_history += request.POST.get('answer')
+		elif request.POST.get("answer") != "":
+			select.choice_history += request.POST.get("answer")
 			select.correct = False
 			select.save()
-		return redirect('question')
+		return redirect("question")
 
 	# Context used for the template
 	context = {"question"	: question,									 # The question
@@ -142,11 +142,11 @@ def view_results(request):
 
 	# Getting the selector
 	try:
-		select = Selector.objects.get(pk=request.session.get('sel_pk'))
+		select = Selector.objects.get(pk=request.session.get("sel_pk"))
 	except ObjectDoesNotExist:
-		return redirect('custom_error')
+		return redirect("custom_error")
 
-	record = [x.strip(' ') for x in select.record[:len(select.record) - 2].split(',')]
+	record = [x.strip(" ") for x in select.record[:len(select.record) - 2].split(",")]
 	num_units = len(eval(select.subject + "_UNITS"))
 	total = len(record)		# The total number of questions
 	total_missed = 0		# Total questions missed
@@ -160,7 +160,7 @@ def view_results(request):
 	# For each question history in the records, provided at least one exists, compute the statistics
 	if str(record[0]) != "":
 		for x in record:
-			data = x.split(' ')
+			data = x.split(" ")
 			q_pk = data[0]												# The question
 			skipped = data[1]											# If it was skipped
 			if skipped == "False":										# If it wasn't skipped
@@ -179,7 +179,7 @@ def view_results(request):
 				total_missed += 1
 				unit = Question.objects.get(pk=q_pk).unit
 				num_miss_by_unit[unit - 1] += 1
-				if skipped == 'True':
+				if skipped == "True":
 					num_skiped_by_unit[unit - 1] += 1
 
 	# Printing the Statistics for debugging
@@ -222,16 +222,16 @@ def question_bug_report(request):
 	if request.method == "POST":
 		# Getting the selector
 		try:
-			select = Selector.objects.get(pk=request.session.get('sel_pk'))
+			select = Selector.objects.get(pk=request.session.get("sel_pk"))
 		except ObjectDoesNotExist:
-			return redirect('custom_error')
+			return redirect("custom_error")
 
 		form = QuestionBugForm(request.POST)
 		if form.is_valid():
 			bug = form.save(commit=False)
 			bug.question = select.get_question()
 			bug.save()
-			return redirect('question')
+			return redirect("question")
 	else:
 		form = QuestionBugForm()
 	return render(request, "NYRP/question_problem.html", {"form": form})

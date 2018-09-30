@@ -1,4 +1,4 @@
-{% extends 'NYRP/base.html' %}
+{% extends "NYRP/base.html" %}
 {% load static %}
 {% block content %}
 
@@ -7,7 +7,7 @@
 <div class="container-fluid">
 	<div class="row"style="text-align:center">
 		<div class="col-md-12">
-		<form method='post'>
+		<form method="post">
 		{% csrf_token %}
 			<div class="row" >
 				<div class="col-md-4">
@@ -17,7 +17,7 @@
 					<div class="page-header">
 						<h1>Chemistry</h1>
 					</div> 
-					<input class="btn btn-lg btn-block btn-warning" type='submit' value='Start!' >
+					<input class="btn btn-lg btn-block btn-warning" type="submit" value="Start!" >
 					<h3>
 						Or Personalize Your Experience!
 					</h3>
@@ -431,7 +431,7 @@
 
 <!--Option four-->
 <div class="container-fluid">
-	<form method='post'>
+	<form method="post">
 	{% csrf_token %}
 	<div class="row" >
 		<div class="col-md-4"></div>
@@ -470,7 +470,7 @@
 					{% endif %}-->
 				</div>
 			</div>
-			<input class="btn btn-lg btn-block btn-warning" type='submit' name="by_unit" value='Practice These Questions!' >
+			<input class="btn btn-lg btn-block btn-warning" type="submit" name="by_unit" value="Practice These Questions!" >
 			{% if form.units.errors|length > 0 %}
 				<h4 class="text-center"><b>If you pick questions by unit, you must select at least one unit.</b></h4>
 			{% endif %}
@@ -487,7 +487,7 @@
 					{% endif %}
 				{% endfor %}
 			</div>
-			<input class="btn btn-lg btn-block btn-warning" type='submit' name="by_exam" value='Take These Exams!' >
+			<input class="btn btn-lg btn-block btn-warning" type="submit" name="by_exam" value="Take These Exams!" >
 			{% if form.exams.errors|length > 0 %}
 				<h4 class="text-center"><b>If you pick questions by exam, you must select at least one exam.</b></h4>
 			{% endif %}
@@ -511,11 +511,11 @@
 		</div>
 		<!--Small local javascript to run the modal-->
 		<script type="text/javascript">
-			$(window).on('load',function(){
-				$('#myModal').modal('show');
+			$(window).on("load",function(){
+				$("#myModal").modal("show");
 				// hide it three seconds
 				myModalTimeout = setTimeout(function() {
-					$('#myModal').modal('hide');
+					$("#myModal").modal("hide");
 				}, 3000);
 			});
 		</script>

@@ -84,14 +84,14 @@ class SelectorForm(forms.Form):
 	# Initialization of the the form
 	def __init__(self, *args, **kwargs):
 		# The request with which the form was submitted
-		self.req = kwargs.pop('req')
+		self.req = kwargs.pop("req")
 		# The subject they user has selected
-		self.subject = kwargs.pop('subject')
+		self.subject = kwargs.pop("subject")
 		super(SelectorForm, self).__init__(*args, **kwargs)
 		# Picking the correct exam/units based on the subject
-		self.fields['units'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+		self.fields["units"] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
 														 choices=eval(self.subject + "_UNITS"), required=False)
-		self.fields['exams'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+		self.fields["exams"] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
 														 choices=eval(self.subject + "_EXAMS"), required=False)
 
 	# Checking the form for errors
@@ -104,10 +104,10 @@ class SelectorForm(forms.Form):
 		# questions by the exam and didn't select the exam button.
 		if "by_unit" in self.req:
 			if len(units) < 1:
-				self.add_error('units', "unit")
+				self.add_error("units", "unit")
 		elif "by_exam" in self.req:
 			if len(exams) < 1:
-				self.add_error('exams', "exam")
+				self.add_error("exams", "exam")
 		return self.cleaned_data		# Returning the cleaned data
 
 

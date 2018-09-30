@@ -32,14 +32,14 @@ class Question(models.Model):
 	C		 = models.CharField(max_length=200, blank=True)
 	D		 = models.CharField(max_length=200, blank=True)
 	E		 = models.CharField(max_length=200, blank=True)
-	ans 	 = models.CharField(max_length=1, default='z')
+	ans 	 = models.CharField(max_length=1, default="z")
 	subject  = models.CharField(choices=settings.SUBJECTS, max_length=4, default="ERRO")
 	month  	 = models.CharField(max_length=200, blank=True)
 	year 	 = models.IntegerField(blank=True, null=True)
 	unit 	 = models.IntegerField(blank=True, null=True)
 	group 	 = models.ForeignKey("Group", blank=True, null=True)
 	hint 	 = models.ForeignKey("Hint",  blank=True, null=True)
-	diagram  = models.FileField(default = None, blank=True, null=True, upload_to='diagrams')
+	diagram  = models.FileField(default = None, blank=True, null=True, upload_to="diagrams")
 
 	# How the question is shown in the admin view
 	def __str__(self):
@@ -120,7 +120,7 @@ class Selector(models.Model):
 		#	self.questions = self.questions[0:50]
 
 		# Randomizing the Queryset and storing that random order in pri_keys
-		for q in self.questions.all().order_by('?'):
+		for q in self.questions.all().order_by("?"):
 			self.pri_keys += str(q.pk) + ","
 		self.pri_keys = self.pri_keys[0:len(self.pri_keys) - 1]		# Removing trailing ","
 		self.save()			# Saving it

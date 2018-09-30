@@ -1,4 +1,4 @@
-{% extends 'NYRP/base.html' %}
+{% extends "NYRP/base.html" %}
 {% load static %}
 {% block content %}
 <!--Local styling to center the diagrams-->
@@ -18,7 +18,7 @@ img {
 			<div class="progress">
   				<div id = "progress_bar" class="progress-bar progress-bar-success progress-bar-striped active" style="width:{{percent}}%">{{percent}}%</div>
 			</div>
-			<form id='answerForm2' method='post'>
+			<form id="answerForm2" method="post">
 				{% csrf_token %}
 				<button style="float: right;" type="submit" class="btn btn-danger" name="skip" id="skip">Skip Question</button>
 			</form>
@@ -45,10 +45,10 @@ img {
 				  </tr>
 					<tr>
 						<td>
-							<form id='answerForm' method='post'>
+							<form id="answerForm" method="post">
 								{% csrf_token %}
 								<input  type="hidden" id="answer" name="answer" value=""/>
-								<button type='submit' id="submit" name="next"   class="btn btn-primary btn-block">Submit</button>
+								<button type="submit" id="submit" name="next"   class="btn btn-primary btn-block">Submit</button>
 							</form>
 						</td>
 					</tr>
@@ -63,7 +63,7 @@ img {
 		<div class="col-md-10">
 			<button class="btn btn-info" onclick="open_pdf('{% static 'ChemRef.pdf' %}')">View Reference Table</button>
 
-			<form id='answerForm3' method='post'>
+			<form id="answerForm3" method="post">
 				{% csrf_token %}
 				<button style="float: right;" type="submit" class="btn btn-warning" name="end" >End Test Early and View Results</button>
 			</form>
@@ -75,10 +75,10 @@ img {
 <!--Pop up if the user wants so submit a bug with the question-->
 <div class="modal fade" id="modal"></div>
 <script>
-$('#modal').on('show.bs.modal', function (event) {
+$("#modal").on("show.bs.modal", function (event) {
     var modal = $(this)
     $.ajax({
-        url: "{% url 'report_question' %}",
+        url: "{% url "report_question" %}",
         context: document.body
     }).done(function(response) {
         modal.html(response);

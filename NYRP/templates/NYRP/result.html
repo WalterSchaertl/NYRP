@@ -1,4 +1,4 @@
-{% extends 'NYRP/base.html' %}
+{% extends "NYRP/base.html" %}
 {% load static %}
 {% block content %}
 <body onload ="pieChartFunc('{{miss_by_unit}}'); animatePercentChart('{{percent_correct}}'); piechartAnsFunc('{{trys}}','{{total_skipped}}'); piechartSkipFunc('{{num_skiped_by_unit}}');"></body>
