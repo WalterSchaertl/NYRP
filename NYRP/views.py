@@ -58,6 +58,12 @@ def prep(request, subject):
 				return render(request, "NYRP/prep.html", {"form": form, "title": subject.replace("_", " ")})
 			# If everything was a success, start displaying the questions
 			return redirect("question")
+		else:
+			errors = form.errors.as_data()
+			if errors.get("exams") is not None:
+				messages.error(request, "If you pick questions by exam, you must select at least one exam.")
+			if errors.get("units") is not None:
+				messages.error(request, "If you pick questions by unit, you must select at least one unit.")
 	# Otherwise, show them a form
 	else:
 		form = SelectorForm(req=request.POST, subject=bd_subject)
@@ -231,6 +237,7 @@ def question_bug_report(request):
 			bug = form.save(commit=False)
 			bug.question = select.get_question()
 			bug.save()
+			messages.error(request, "Bug Report submitted successfully, thank you!")
 			return redirect("question")
 	else:
 		form = QuestionBugForm()

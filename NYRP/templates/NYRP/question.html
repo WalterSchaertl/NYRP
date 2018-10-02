@@ -13,7 +13,7 @@ img {
 	<div class="row">
 		<div class="col-md-1"></div>
 		<div class="col-md-10">
-			<a class="btn" data-toggle="modal" data-target="#modal" href="{% url 'report_question' %}" style="float: right;">Submit A Problem With This Question</a>
+			<a class="btn" data-toggle="modal" data-target="#bugForm" href="{% url 'report_question' %}" style="float: right;">Submit A Problem With This Question</a>
 			<h3>Question {{index }} of {{total}}</h3>
 			<div class="progress">
   				<div id = "progress_bar" class="progress-bar progress-bar-success progress-bar-striped active" style="width:{{percent}}%">{{percent}}%</div>
@@ -73,9 +73,22 @@ img {
 </div>
 
 <!--Pop up if the user wants so submit a bug with the question-->
-<div class="modal fade" id="modal"></div>
+<div class="modal fade" id="bugForm"></div>
+
+<!--Success message for submitting a bug -->
+<div id="bugReported" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal">&times;</button>
+			  <h4 style="text-align:center">{% for message in messages %}{{ message }}{% endfor %}</h4>
+		  </div>
+		</div>
+	</div>
+</div>
+
 <script>
-$("#modal").on("show.bs.modal", function (event) {
+$("#bugForm").on("show.bs.modal", function (event) {
     var modal = $(this)
     $.ajax({
         url: "{% url "report_question" %}",
@@ -84,6 +97,16 @@ $("#modal").on("show.bs.modal", function (event) {
         modal.html(response);
     });
 })
+
+{% if messages %}
+	$(window).on("load",function(){
+		$("#bugReported").modal("show");
+		// Show the user they successfully submitted a bug report
+		myModalTimeout = setTimeout(function() {
+			$("#bugReported").modal("hide");
+		}, 2000);
+	});
+{% endif %}
 </script>
 
 </body>

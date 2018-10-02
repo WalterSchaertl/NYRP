@@ -471,9 +471,6 @@
 				</div>
 			</div>
 			<input class="btn btn-lg btn-block btn-warning" type="submit" name="by_unit" value="Practice These Questions!" >
-			{% if form.units.errors|length > 0 %}
-				<h4 class="text-center"><b>If you pick questions by unit, you must select at least one unit.</b></h4>
-			{% endif %}
 		</div>
 		<div class="col-md-2"></div>
 		<div class="col-md-4">
@@ -488,9 +485,6 @@
 				{% endfor %}
 			</div>
 			<input class="btn btn-lg btn-block btn-warning" type="submit" name="by_exam" value="Take These Exams!" >
-			{% if form.exams.errors|length > 0 %}
-				<h4 class="text-center"><b>If you pick questions by exam, you must select at least one exam.</b></h4>
-			{% endif %}
 		</div>
 		<div class="col-md-1"></div>
 	</div>
@@ -499,7 +493,7 @@
 
 	<!--Setting up a pop up if the user selected options where there are no questions-->
 	{% if messages %}
-		<div id="myModal" class="modal fade" role="dialog">
+		<div id="errorMessage" class="modal fade" role="dialog">
 		  <div class="modal-dialog">
 			<div class="modal-content">
 			  <div class="modal-header">
@@ -512,11 +506,11 @@
 		<!--Small local javascript to run the modal-->
 		<script type="text/javascript">
 			$(window).on("load",function(){
-				$("#myModal").modal("show");
-				// hide it three seconds
+				$("#errorMessage").modal("show");
+				// Show the error for five seconds
 				myModalTimeout = setTimeout(function() {
-					$("#myModal").modal("hide");
-				}, 3000);
+					$("#errorMessage").modal("hide");
+				}, 5000);
 			});
 		</script>
 	{% endif %}
