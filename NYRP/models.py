@@ -37,8 +37,8 @@ class Question(models.Model):
 	month  	 = models.CharField(max_length=200, blank=True)
 	year 	 = models.IntegerField(blank=True, null=True)
 	unit 	 = models.IntegerField(blank=True, null=True)
-	group 	 = models.ForeignKey("Group", blank=True, null=True)
-	hint 	 = models.ForeignKey("Hint",  blank=True, null=True)
+	group 	 = models.ForeignKey("Group", blank=True, null=True, on_delete=models.SET_NULL)
+	hint 	 = models.ForeignKey("Hint",  blank=True, null=True, on_delete=models.SET_NULL)
 	diagram  = models.FileField(default = None, blank=True, null=True, upload_to="diagrams")
 
 	# How the question is shown in the admin view
@@ -104,7 +104,7 @@ class Selector(models.Model):
 
 		# If the user choose to get questions by unit, filter by unit
 		if by_unit:
-			self.questions = Question.objects.filter(subject=self.subject).filter(unit__in=units)
+			self.questions.set(Question.objects.filter(subject=self.subject).filter(unit__in=units))
 		else:
 			# Exams are a list of Month Year pairings
 			for exam in exams:
@@ -112,7 +112,7 @@ class Selector(models.Model):
 				year = exam[exam.index(" ") + 1:]
 				# Adding each question that matches both the year and the month for each exam
 				# TODO refactor this
-				self.questions = self.questions.all() | Question.objects.filter(subject=self.subject).filter(year=year, month=month)
+				self.questions.set(self.questions.all() | Question.objects.filter(subject=self.subject).filter(year=year, month=month))
 
 		# Used for debugging to limit the number of questions
 		# If there's more questions than we want to give to the user
@@ -146,7 +146,7 @@ class QuestionBug(models.Model):
 	Description:	A description of the fault
 	Time:			When the error occurred
 	"""
-	question = models.ForeignKey(Question)
+	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 	bug_choices = models.CharField(max_length=1, choices=QUESTION_BUG_CHOICES, default="5")
 	description = models.TextField(blank=True)
 	time = models.DateTimeField(default=timezone.now, blank=True)
