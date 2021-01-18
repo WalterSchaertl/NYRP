@@ -1,0 +1,77 @@
+{% extends "NYRP/base.html" %}
+{% load static %}
+{% block content %}
+<body onload ="pieChartFunc('[2, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 1]'); animatePercentChart('50'); piechartAnsFunc('[7, 1, 4, 0]','2'); piechartSkipFunc('[1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]');"></body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-2"> </div>
+		<div class="col-md-8">
+			<div class="page-header">
+				<h1>
+					About New York Regents Prep
+				</h1>
+			</div>
+			<p>
+				This is a website aiming to help New York students with studying for the end of year state tests. From
+				here you are able to select real regents exam questions from previous years to practice. Questions can
+				be chosen either by the year they appeared or by the topic/unit they belong to.
+			</p>
+			<p>
+				There are unlimited attempts allowed per question, giving you immediate feedback. After finishing all
+				the questions, or ending the test early if you need a break, a breakdown of your performance is shown.
+				It displays your overall results, as well as a break down of whatever questions you got wrong by unit to
+				assist in additional targeted studying.
+			</p>
+			<p>
+				If you wish to see the source code, it's hosted on Github <a href="https://github.com/WalterSchaertl/NYRP">here</a>.
+			</p>
+		</div>
+		<div class="col-md-2"> </div>
+	</div>
+	<div class="container-fluid">
+		<div class="row">
+			<h1 class="text-center"><b>Example Results Of A Chemistry Exam</b></h1>
+			<div class="col-md-6">
+				<h3 class="text-center"> Percent Questions Correct</h3>
+				<div class="clearfix circle_center">
+					<div id="percentchart" class="c100 big green p0">
+						<span id = "percentChartText">0%</span>
+						<div class="slice">
+							<div class="bar"></div>
+							<div class="fill"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<h3 class="text-center">Questions Missed By Unit</h3>
+				<div class = "center" id="piechart" style="width: 900px; height: 500px;"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6">
+				<h3 class="text-center">Questions Answered On The ____</h3>
+				<div class = "center" id="piechartAns" style="width: 900px; height: 500px;"></div>
+			</div>
+
+			<div class="col-md-6">
+				<h3 class="text-center">Questions Skipped By Unit</h3>
+				<div class = "center" id="piechartSkip" style="width: 900px; height: 500px;"></div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-8">
+				<p>Congratulations! You got 7 out of 14 questions correct (50%)! You were able to answer 7 question(s) on your first try, 1 on your second, 4 on your third, and 0 on your last. You skipped 2 question(s).</p>
+				<h4>How the grading works:</h4>
+				<p>To determine the percentage of questions scored as “correct”, only questions answered on the first attempt are counted. Questions that were skipped, or answered after the first try, are considered incorrect. If you’re using this as a practice and skipped all the units you haven’t covered yet, then the results may be off. </p>
+			</div>
+			<div class="col-md-2">
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

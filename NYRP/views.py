@@ -266,3 +266,13 @@ def custom_error(request):
 			error_message = "No data could be found for your session, please try selecting questions again."
 
 	return render(request, "NYRP/custom_error.html", {"code": 400, "message": error_message})
+
+
+def about_site(request):
+	"""
+	The about page for information about the website and author
+
+	:param request: A HTTPRequest object for the client about page
+	:return: A HTTPResponse object, the rendering of the about.htm
+	"""
+	return render(request, "NYRP/about.html")
