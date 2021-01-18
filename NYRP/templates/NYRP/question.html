@@ -27,7 +27,7 @@ img {
 				{{question.question}}
 			</h3>
 			{% if question.diagram %}
-				<img src="{{ question.diagram.url }}" alt="Diagram">
+				<img src="{% static static_url  %}" alt="Diagram">
 			{% endif %}
 			<div class="centered">
 				<table style="margin-left:auto;margin-right:auto;">

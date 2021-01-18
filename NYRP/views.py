@@ -126,13 +126,18 @@ def question(request):
 			select.save()
 		return redirect("question")
 
+	# This is atypical, but the question diagrams are stored as static files, not under media
+	# However, they will never change and are only 'uploaded' by a admin, and should only happen
+	# once, so they are more like static than dynamic, but are associated to questions.
+
 	# Context used for the template
 	context = {"question"	: question,									 # The question
 				"total"		: total_q,									 # The total number of questions
 				"index"		: select.index + 1,							 # Where the user is in that list
 				"correct"	: select.correct,							 # If they're previous answer was correct
 				"prev_ans"	: select.choice_history,					 # What they answered previously
-				"percent"	: int(round(select.index / total_q * 100))}	 # What percent they've done
+				"percent"	: int(round(select.index / total_q * 100)),	 # What percent they've done
+				"static_url": question.diagram.url[1:] if question.diagram else ""}  # The questions diagram
 
 	return render(request, "NYRP/question.html", context)
 

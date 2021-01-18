@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+	"whitenoise.runserver_nostatic",
 	"NYRP.apps.NyrpConfig",
 	"django.contrib.admin",
 	"django.contrib.auth",
@@ -129,7 +130,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATIC_URL = "/static/"
-MEDIA_URL = "/media/"
+MEDIA_URL = ""
 
 # List of subjects implemented or to be implemented
 SUBJECTS = (("CHEM", "Chemistry"),
