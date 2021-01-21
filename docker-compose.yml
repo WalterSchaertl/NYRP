@@ -2,6 +2,6 @@ web:
   build: .
   volumes:
     - .:/code
-  command: python3.8 manage.py runserver 0.0.0.0:8000
+  command: python3 manage.py runserver 0.0.0.0:8000
   ports:
     - "8000:8000"
