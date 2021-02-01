@@ -47,6 +47,7 @@ USHG_UNITS = (
 )
 USHG_EXAMS = (
 	("August 2017", "August 2017"),
+	("January 2020", "January 2020")
 )
 
 
