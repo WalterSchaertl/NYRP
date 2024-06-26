@@ -24,6 +24,7 @@ CHEM_UNITS = (
 	("12", "12: Nuclear Chemistry"),
 )
 CHEM_EXAMS = (
+	("January 2024", "January 2024"),
 	("January 2017", "January 2017"),
 	("June 2017", "June 2017"),
 	# ("August 2017", "August 2017"),
