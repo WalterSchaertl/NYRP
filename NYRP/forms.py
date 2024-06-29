@@ -25,8 +25,9 @@ CHEM_UNITS = (
 )
 CHEM_EXAMS = (
 	("January 2024", "January 2024"),
-	("January 2017", "January 2017"),
+	("August 2023", "August 2023"),
 	("June 2017", "June 2017"),
+	("January 2017", "January 2017"),
 	# ("August 2017", "August 2017"),
 	# ("January 2016", "January 2016"),
 	# ("June 2016", "June 2016"),
