@@ -25,7 +25,7 @@ def main():
 				# Set the diagram name to the production expected location (stataicfiles/diagrams/{diagram_name})
 				question["diagram"] = new_diagram_path
 			# Remove any previously generated question, TODO alo match on year/month/subject
-			if len(Question.objects.filter(question=question["question"])) > 0:
+			if len(Question.objects.filter(question=question["question"]).filter(year=question["year"]).filter(month=question["month"])) > 0:
 				print("This question already exists, deleting and recreating.")
 				Question.objects.filter(question=question["question"]).delete()
 			db_question = Question.objects.create(group=None, hint=None, **question)
