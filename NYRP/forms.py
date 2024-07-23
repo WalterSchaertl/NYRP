@@ -29,6 +29,7 @@ CHEM_EXAMS = (
 	("June 2023", "June 2023"),
 	("January 2023", "January 2023"),
 	("August 2022", "August 2022"),
+	("June 2022", "June 2022"),
 	("June 2017", "June 2017"),
 	("January 2017", "January 2017"),
 	# ("August 2017", "August 2017"),
