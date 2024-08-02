@@ -24,7 +24,7 @@ def main():
 				shutil.copy(question["diagram"], "NYRP/static/" + new_diagram_path)
 				# Set the diagram name to the production expected location (stataicfiles/diagrams/{diagram_name})
 				question["diagram"] = new_diagram_path
-			# Remove any previously generated question, TODO alo match on year/month/subject
+			# Remove any previously generated question
 			if len(Question.objects.filter(question=question["question"]).filter(year=question["year"]).filter(month=question["month"])) > 0:
 				print("This question already exists, deleting and recreating.")
 				Question.objects.filter(question=question["question"]).delete()
