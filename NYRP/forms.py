@@ -63,8 +63,24 @@ USHG_EXAMS = (
 
 # Algebra I, Algebra 2, Global History and Geography,
 # and Physics are not implemented yet.
-ALG1_UNITS = (("", ""),)
-ALG1_EXAMS = (("", ""),)
+# TODO add the ALG1 reference sheet: https://www.nysed.gov/sites/default/files/programs/state-assessment/public-facing-reference-sheet.pdf
+# and https://www.nysed.gov/sites/default/files/programs/state-assessment/a1-next-gen-reference-sheet.pdf starting June 2024
+# and update the reference table button to point to them
+ALG1_UNITS = (
+	("1", "1: The Real Number System"),
+	("2", "2: Quantities"),
+	("3", "3: Structure in Expressions"),
+	("4", "4: Arithmetic with Polynomials nd Rational Expressions"),
+	("5", "5: Creating Equations"),
+	("6", "6: Reasoning with Questions and Inequalities"),
+	("7", "7: Interpreting Functions"),
+	("8", "8: Building Functions"),
+	("9", "9: Linear, Quadratic, and Exponential Models"),
+	("10", "10: Interpreting Categorical and Quantitative Data")
+)
+ALG1_EXAMS = (	("June 2024", "June 2024"),)
+
+
 ALG2_UNITS = (("", ""),)
 ALG2_EXAMS = (("", ""),)
 GHGE_UNITS = (("", ""),)
