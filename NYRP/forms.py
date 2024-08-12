@@ -78,7 +78,10 @@ ALG1_UNITS = (
 	("9", "9: Linear, Quadratic, and Exponential Models"),
 	("10", "10: Interpreting Categorical and Quantitative Data")
 )
-ALG1_EXAMS = (	("June 2024", "June 2024"),)
+ALG1_EXAMS = (
+	("June 2024", "June 2024"),
+	("January 2024", "January 2024"),
+)
 
 
 ALG2_UNITS = (("", ""),)
