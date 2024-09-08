@@ -24,6 +24,8 @@ CHEM_UNITS = (
 	("12", "12: Nuclear Chemistry"),
 )
 CHEM_EXAMS = (
+	("August 2024", "August 2024"),
+	# TODO June 2024 Chem
 	("January 2024", "January 2024"),
 	("August 2023", "August 2023"),
 	("June 2023", "June 2023"),
@@ -52,6 +54,7 @@ USHG_UNITS = (
 
 )
 USHG_EXAMS = (
+	("August 2024", "August 2024"),
 	("June 2024", "June 2024"),
 	("January 2024", "January 2024"),
 	("August 2023", "August 2023"),
