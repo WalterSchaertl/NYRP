@@ -137,7 +137,8 @@ SUBJECTS = (("CHEM", "Chemistry"),
 			("USHG", "US History And Government"),
 			("ALG1", "Algebra I"),
 			("ALG2", "Algebra II Common Core"),
-			("GHGE", "Global History And Geography"),
+			# ("GHGE", "Global History And Geography"), # Discontinued in 2018
+			("GHG2", "Global History And Geography II"),
 			("PHYS", "Physics"),
 			("ERRO", "Error: no subject"))
 

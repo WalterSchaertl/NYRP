@@ -40,6 +40,7 @@ CHEM_EXAMS = (
 	("August 2016", "August 2016"),
 )
 
+# TODO, update units to align with key ideas in https://www.nysed.gov/sites/default/files/programs/standards-instruction/framework-9-12-with-2017-updates.pdf
 # United States History and Government
 USHG_UNITS = (
 	("1", "Period 1: 1491–1607"),
@@ -92,8 +93,37 @@ ALG1_EXAMS = (
 
 ALG2_UNITS = (("", ""),)
 ALG2_EXAMS = (("", ""),)
-GHGE_UNITS = (("", ""),)
-GHGE_EXAMS = (("", ""),)
+
+GHG1_UNITS = (  # This was discontinued in 2018
+	("1", "1: Development of Civilization"),  # 9.1: 10000 BCE to 630 CE
+	("2", "2: The Rise and Impact of Belief Systems"),  # 9.2: 10000 BCE to 630 CE
+	("3", "3: Expansion, Achievement, and Decline of Classical Civilizations"),  # 9.3: 600 BCE to 900 CE
+	("4", "4: Rise of Transregional Trade Networks"),  # 9.4: 500 CD to 1500 CE
+	("5", "5: Political Powers and Achievements"),  # 9.5: 500 CD to 1500 C
+	("6", "6: Social and Cultural Growth and Conflict"),  # 9.5: 500 CD to 1500 C
+	("7", "7: Ottoman Empire and Ming Dynasty Pre-1600"),  # 9.7 1400 CE to 1600 CE
+	("8", "8: Africa and the Americas Pre-1600"),  # 9.8 1325 CE to 1600 CE
+	("9", "9: Transformations of Western Europe and Russia"),  # 9.9 1400 CE to 1750 CE
+	("10", "10: Interactions nad Disruptions")  # 9.10 1400 CE to 1750 CE
+)
+GHG1_EXAMS = (("", ""),)
+
+GHG2_UNITS = (
+	("1", "1: The World in 1750"),  # 10.1
+	("2", "2: Enlightenment, Revolution, and Nationalism (1750-1914)"),  # 10.2 (1750-1914)
+	("3", "3: Causes and Effects of the Industrial Revolution (1750-1914)"),  # 10.3 (1750-1914)
+	("4", "4: Imperialism (1750-1914)"),  # 10.4 (1750-1914)
+	("5", "5: Unresolved Global Conflict (1914-1945)"),  # 10.5 (1914-1945)
+	("6", "6: Unresolved Global Conflict (1945-1991)"),  # 10.5 (1945-1991)
+	("7", "7: Decolonization and Nationalism (1900-2000)"),  # 10.7 (1900-2000)
+	("8", "8: Tensions Between Traditional Cultures and Modernization (1945-present)"),  # 10.8 (1945-present)
+	("9", "9: Globalization and a Changing Global Environment (1945-present)"),  # 10.9 (1990-present)
+	("10", "10: Human Rights Violations (1933-present)")  # 10.10 (1948-present)
+)
+GHG2_EXAMS = (
+	("August 2024", "August 2024"),
+)
+
 PHYS_UNITS = (("", ""),)
 PHYS_EXAMS = (("", ""),)
 ERRO_UNITS = (("", ""),)
