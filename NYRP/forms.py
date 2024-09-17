@@ -122,6 +122,8 @@ GHG2_UNITS = (
 )
 GHG2_EXAMS = (
 	("August 2024", "August 2024"),
+	("June 2024", "June 2024"),
+	("January 2024", "January 2024")
 )
 
 PHYS_UNITS = (("", ""),)

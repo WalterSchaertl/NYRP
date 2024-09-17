@@ -25,9 +25,9 @@ def main():
 				# Set the diagram name to the production expected location (stataicfiles/diagrams/{diagram_name})
 				question["diagram"] = new_diagram_path
 			# Remove any previously generated question
-			if len(Question.objects.filter(question=question["question"]).filter(year=question["year"]).filter(month=question["month"])) > 0:
-				print("This question already exists, deleting and recreating.")
-				Question.objects.filter(question=question["question"]).delete()
+			if len(Question.objects.filter(question=question["question"]).filter(year=question["year"]).filter(month=question["month"]).filter(subject=question["subject"])) > 0:
+				print("This question already exists, deleting and recreating: " + question["question"])
+				Question.objects.filter(question=question["question"]).filter(year=question["year"]).filter(month=question["month"]).filter(subject=question["subject"]).delete()
 			db_question = Question.objects.create(group=None, hint=None, **question)
 			try:
 				db_question.save()
@@ -37,4 +37,5 @@ def main():
 
 
 if __name__ == "__main__":
+	#Question.objects.filter(year=2024).filter(month="January").filter(subject="ALG1").delete()
 	main()
