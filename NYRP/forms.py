@@ -91,8 +91,26 @@ ALG1_EXAMS = (
 )
 
 
-ALG2_UNITS = (("", ""),)
-ALG2_EXAMS = (("", ""),)
+ALG2_UNITS = (
+	("1", "1: The Real Number System"),
+	("2", "2: Quantities"),
+	("3", "3: The Complex Number System"),
+	("4", "4: Seeing Structure in Expressions"),
+	("5", "5: Arithmetic with Polynomials and Rational Expressions"),
+	("6", "6: Creating Equations"),
+	("7", "7: Reasoning with Equations and Inequalities"),
+	("8", "8: Expressing Geometric Properties with Equations"),
+	("9", "9: Interpreting Functions"),
+	("10", "10: Building Functions"),
+	("11", "11: Linear, Quadratic, and Exponential Models "),
+	("12", "12: Trigonometric Functions "),
+	("13", "13: Interpreting categorical and quantitative data "),
+	("14", "14: Making Inferences and Justifying Conclusions"),
+	("15", "15: Conditional Probability and the Rules of Probability ")
+)
+ALG2_EXAMS = (
+	("August 2024", "August 2024"),
+)
 
 GHG1_UNITS = (  # This was discontinued in 2018
 	("1", "1: Development of Civilization"),  # 9.1: 10000 BCE to 630 CE
