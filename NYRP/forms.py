@@ -110,6 +110,10 @@ ALG2_UNITS = (
 )
 ALG2_EXAMS = (
 	("August 2024", "August 2024"),
+	("June 2024", "June 2024"),
+	("January 2024", "January 2024"),
+	("August 2023", "August 2023"),
+	("June 2023", "June 2023")
 )
 
 GHG1_UNITS = (  # This was discontinued in 2018
