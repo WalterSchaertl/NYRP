@@ -150,6 +150,26 @@ GHG2_EXAMS = (
 	("June 2023", "June 2023")
 )
 
+ESCI_UNITS = (
+	("1", "1: Introduction to Earth's Changing Environment"),
+	("2", "2: Measuring Earth"),
+	("3", "3: Earth in the Universe"),
+	("4", "4: Motion of Earth, Moon, and Sun"),
+	("5", "5: Energy in Earth Processes"),
+	("6", "6: Insolation and the Seasons"),
+	("7", "7: Weather"),
+	("8", "8: Water and Climate"),
+	("9", "9: Weathering and Erosion"),
+	("10", "10: Deposition"),
+	("11", "11: Earth Materials-Minerals, Rocks, and Mineral Resources"),
+	("12", "12: Earth's Dynamic Crust and Interior"),
+	("13", "13: Interpreting Geologic History"),
+	("14", "14: Landscape Development and Environmental Change"),
+)
+ESCI_EXAMS = (
+	("August 2024", "August 2024"),
+)
+
 PHYS_UNITS = (("", ""),)
 PHYS_EXAMS = (("", ""),)
 ERRO_UNITS = (("", ""),)

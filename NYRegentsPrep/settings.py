@@ -140,6 +140,9 @@ SUBJECTS = (("CHEM", "Chemistry"),
 			# ("GHGE", "Global History And Geography"), # Discontinued in 2018
 			("GHG2", "Global History And Geography II"),
 			("PHYS", "Physics"),
+			("ESCI", "Earth Science"),
+			("GEOM", "Geometry"),
+			("LIVE", "Living Environment"),
 			("ERRO", "Error: no subject"))
 
 # Heroku: Update database configuration from $DATABASE_URL.
