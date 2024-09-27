@@ -126,6 +126,7 @@ def question(request):
 			select.save()
 		return redirect("question")
 
+	ref_table = question.subject + "Ref.pdf" if question.subject in settings.REQUIRES_REF_TABLE else None
 	# This is atypical, but the question diagrams are stored as static files, not under media
 	# However, they will never change and are only 'uploaded' by a admin, and should only happen
 	# once, so they are more like static than dynamic, but are associated to questions.
@@ -137,7 +138,8 @@ def question(request):
 				"correct"	: select.correct,							 # If they're previous answer was correct
 				"prev_ans"	: select.choice_history,					 # What they answered previously
 				"percent"	: int(round(select.index / total_q * 100)),	 # What percent they've done
-				"static_url": question.diagram.url[1:] if question.diagram else ""}  # The questions diagram
+				"static_url": question.diagram.url[1:] if question.diagram else "",  # The questions diagram
+				"ref_table" : ref_table}								 # The reference table (if required)
 
 	return render(request, "NYRP/question.html", context)
 

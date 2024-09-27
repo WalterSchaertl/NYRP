@@ -168,6 +168,7 @@ ESCI_UNITS = (
 )
 ESCI_EXAMS = (
 	("August 2024", "August 2024"),
+	("June 2024", "June 2024"),
 )
 
 PHYS_UNITS = (("", ""),)

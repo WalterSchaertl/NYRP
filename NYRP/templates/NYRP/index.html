@@ -97,6 +97,24 @@
 				</div>
 				<div class="col-md-4">
 					<div class="thumbnail">
+						<img alt="Earth Science Thumbnail" src="{% static 'NYRP/earthSci.jpg' %}" />
+						<div class="caption">
+							<h3>
+								Earth Science
+							</h3>
+							<p>
+								Practice recent regents exams, or study by unit!
+							</p>
+							<p>
+								<a class="btn btn-primary" href="{% url 'prep' 'Earth_Science' %}">Start</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="thumbnail">
 						<img alt="Physics Thumbnail"  src="{% static 'NYRP/phys.png' %}" />
 						<div class="caption">
 							<h3>
@@ -108,24 +126,6 @@
 							<p>
 								<!--Usually an a tag, but a disabled button for now-->
 								<button disabled class="btn btn-primary" href="{% url 'prep' 'Physics' %}">Start</button>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<div class="thumbnail">
-						<img alt="Earth Science Thumbnail" src="{% static 'NYRP/earthSci.jpg' %}" />
-						<div class="caption">
-							<h3>
-								Earth Science
-							</h3>
-							<p>
-								Practice recent regents exams, or study by unit!
-							</p>
-							<p>
-								<a class="btn btn-primary" href="{% url 'prep' 'Earth_Science' %}">Start</a>
 							</p>
 						</div>
 					</div>

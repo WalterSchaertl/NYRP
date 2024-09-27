@@ -145,6 +145,8 @@ SUBJECTS = (("CHEM", "Chemistry"),
 			("LIVE", "Living Environment"),
 			("ERRO", "Error: no subject"))
 
+REQUIRES_REF_TABLE = ["CHEM", "ESCI", "GEOM", "PHYS"]
+
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
