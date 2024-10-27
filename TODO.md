@@ -1,11 +1,7 @@
 # Notes on things to do
 
 ## Fixes before deploying live
-1. Fix images
-   1. Standardize image naming
-   2. Switch all to free use images
-   3. standardize the size
-2. description at the end what the units are rather than just numbers
+1. description at the end what the units are rather than just numbers
 
 ## Features for the future
 1. Customization for tests
