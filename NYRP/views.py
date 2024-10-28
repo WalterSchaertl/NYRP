@@ -24,7 +24,8 @@ def prep(request, subject):
 
 	:param request: A HTTPRequest object for the page to select questions
 	:param subject: The subject the user wants, specified by the url
-	:return: A HTTPResponse object, the rendering of the prep.html page with the question selection form
+	:return: A HTTPResponse object, the rendering of the prep.html page with the question selection form, or a pdf if
+	they want to see a pdf.
 	"""
 
 	# Changing URL friendly parameter to database parameter and template title
@@ -48,7 +49,7 @@ def prep(request, subject):
 			# Populates the questions based on the user form and how it was submitted
 			select.populate_questions(form.cleaned_data.get("units"),
 									  form.cleaned_data.get("exams"),
-									  "by_unit" in request.POST)
+									  "by_unit" in request.POST or "by_unit_pdf" in request.POST)
 			# Store the primary key for the selector in the session cookies
 			request.session["sel_pk"] = select.pk
 			# Alerts the user if there aren't any questions for what they selected and retry
@@ -56,7 +57,10 @@ def prep(request, subject):
 				messages.error(request, "Oops! They're aren't any questions with those criteria!")
 				form = SelectorForm(request.POST, req=request.POST, subject=bd_subject)
 				return render(request, "NYRP/prep.html", {"form": form, "title": subject.replace("_", " ")})
-			# If everything was a success, start displaying the questions
+			# If everything was a success, and the user wants a pdf, display that
+			if form.is_pdf:
+				return redirect("as_pdf")
+			# Else start displaying the questions
 			return redirect("question")
 		else:
 			errors = form.errors.as_data()
@@ -143,6 +147,26 @@ def question(request):
 
 	return render(request, "NYRP/question.html", context)
 
+
+def as_pdf(request):
+	"""
+	Displays the selected questions as a pdf file
+	"""
+	# Get the selector from the cookies
+	try:
+		select = Selector.objects.get(pk=request.session.get("sel_pk"))
+	except ObjectDoesNotExist:
+		return redirect("custom_error")
+	human_readable_subject = select.subject
+	for tuple in settings.SUBJECTS:
+		if tuple[0] == select.subject:
+			human_readable_subject = tuple[1]
+	context = {
+		"questions": select.questions.all().order_by('?'),
+		"subject": human_readable_subject,
+		"midpoint": (int)(len(select.questions.all()) / 2)
+	}
+	return render(request, "NYRP/print_view.html", context=context)
 
 # TODO convert lists to dictionaries to improve readability
 def view_results(request):

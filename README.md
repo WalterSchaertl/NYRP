@@ -9,7 +9,7 @@ ending the test at any point, more in-dept analysis is provided giving
 students feedback on their best and worst topics. The live version
 can be found here: https://regents-prep.herokuapp.com/NYRP/
 
-## Outside Libraries
+## 3rd Party Libraries
 - BootStrap:  3.3.5
 - JQuery:     2.1.4
 - Django-widget-tweaks 1.4.8
@@ -29,3 +29,9 @@ Note: if you run into issues, in settings.py, ensure that debug is true
 
 ## Docker
 If desired to run as a container, a Dockerfile and docker-compse.yml are provided.
+
+## Other Credits
+* https://www.nysedregents.org/ for exams
+* https://www.pixabay.com for images
+* https://www.nysed.gov and _Prentice Hall Brief Review_ for unit break down
+* https://www.layoutit.com for base webste layout

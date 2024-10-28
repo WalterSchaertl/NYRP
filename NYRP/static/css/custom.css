@@ -1,0 +1,15 @@
+.answer-circle {
+    background: #ffffff;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 12px;
+    border : 2px solid black;
+}
+.answer-filled {
+    print-color-adjust: exact;
+    background: #000000  !important;
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 12px;
+    border : 2px solid black;
+}

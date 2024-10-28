@@ -190,7 +190,9 @@ class SelectorForm(forms.Form):
 	exams - A multiple choice selection for picking questions based on which exam they appeared on
 	"""
 
+
 	# Both of these fields are overwritten in __init__
+	# TODO so why are they here?
 	units = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHEM_UNITS, required=False)
 	exams = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHEM_EXAMS, required=False)
 	# This could possibly be implemented in the future to act as a cap so
@@ -209,6 +211,7 @@ class SelectorForm(forms.Form):
 														 choices=eval(self.subject + "_UNITS"), required=False)
 		self.fields["exams"] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
 														 choices=eval(self.subject + "_EXAMS"), required=False)
+		self.is_pdf = any("pdf" in key for key in self.req.dict().keys())
 
 	# Checking the form for errors
 	def clean(self):
@@ -218,10 +221,10 @@ class SelectorForm(forms.Form):
 		# Adding errors to the form if the user wanted to get questions
 		# by the unit and didn't select a unit, or if they wanted to get
 		# questions by the exam and didn't select the exam button.
-		if "by_unit" in self.req:
+		if "by_unit" in self.req or "by_unit_pdf" in self.req:
 			if len(units) < 1:
 				self.add_error("units", "unit")
-		elif "by_exam" in self.req:
+		elif "by_exam" in self.req or "by_unit_pdf" in self.req:
 			if len(exams) < 1:
 				self.add_error("exams", "exam")
 		return self.cleaned_data		# Returning the cleaned data
