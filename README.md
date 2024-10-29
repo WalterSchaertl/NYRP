@@ -35,3 +35,4 @@ If desired to run as a container, a Dockerfile and docker-compse.yml are provide
 * https://www.pixabay.com for images
 * https://www.nysed.gov and _Prentice Hall Brief Review_ for unit break down
 * https://www.layoutit.com for base webste layout
+* https://www.bootstraptoggle.com/ for custom toggles 

@@ -45,7 +45,83 @@
 			<input class="btn btn-lg btn-block btn-warning" type="submit" name="by_unit" value="Practice These Questions!" >
 			<input class="btn btn-lg btn-block btn-warning" type="submit" name="by_unit_pdf" value="Print A PDF" >
 		</div>
-		<div class="col-md-2"></div>
+		<div class="col-md-2" style="padding-left: 20px; padding-right: 20px">
+		<h2 class="text-center">Advanced Options</h2>
+		<button class="btn btn-lg btn-block btn-default" type="button" name="by_unit_advanced" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Show/Hide</button>
+			<div class="collapse" id="collapseExample">
+				<p>
+					Allows some more control of the type of questions to select and how the test is formatted. Most
+					option apply to both printed and web versions of the exams.
+				</p>
+				<p class="text-center">_________________________</p>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Maximum number of questions</p>
+					</div>
+					<div class="col-md-5 checkbox">
+  						<input type="number" class="form-control" value="50">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Include questions requiring reference tables</p>
+					</div>
+					<div class="col-md-5 checkbox">
+						<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" data-width="75" checked=checked>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Include questions with diagrams</p>
+					</div>
+					<div class="col-md-5 checkbox">
+						<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" data-width="75" checked=checked>
+					</div>
+				</div>
+				<p class="text-center">---Web Version Only---</p>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Show incorrect answers immediately</p>
+					</div>
+					<div class="col-md-5 checkbox">
+						<input type="checkbox" data-toggle="toggle" data-on="On" data-off="Off" data-width="75" checked=checked>
+					</div>
+				</div>
+				<p class="text-center">---Print Version Only---</p>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Print answer sheets</p>
+					</div>
+					<div class="col-md-5 checkbox">
+						<input type="checkbox" data-toggle="toggle" data-on="On" data-off="Off" data-width="75" checked=checked>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Include exam version in title</p>
+					</div>
+					<div class="col-md-5 checkbox">
+						<input type="checkbox" data-toggle="toggle" data-on="Yes" data-off="No" data-width="75">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Fill in answer key</p>
+					</div>
+					<div class="col-md-5 checkbox">
+						<input type="checkbox" data-toggle="toggle" data-on="Fill In" data-off="X Mark" data-width="75" checked=checked>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+						<p class="text-center">Percent image compression</p>
+					</div>
+					<div class="col-md-5 checkbox">
+						<input type="number"  class="form-control" value="100">
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="col-md-4">
 			<h2 class="text-center">Take Exams Based On Date</h2>
 			<button type="button" class="btn btn-default btn-lg btn-block" onclick="checkAllTests()">Select All Exams</button>
