@@ -39,7 +39,7 @@ class Question(models.Model):
 	unit 	 = models.IntegerField(blank=True, null=True)
 	group 	 = models.ForeignKey("Group", blank=True, null=True, on_delete=models.SET_NULL)
 	hint 	 = models.ForeignKey("Hint",  blank=True, null=True, on_delete=models.SET_NULL)
-	diagram  = models.FileField(default = None, blank=True, null=True, upload_to="diagrams")
+	diagram  = models.FileField(default=None, blank=True, null=True, upload_to="diagrams")
 
 	# How the question is shown in the admin view
 	def __str__(self):
@@ -91,7 +91,7 @@ class Selector(models.Model):
 	record = models.TextField(default="")
 
 	# TODO extra form validation so by_unit isn't needed
-	def populate_questions(self, units, exams, by_unit):
+	def populate_questions(self, units, exams, by_unit, question_limit, include_diagrams):
 		"""
 		Creates relationships to the appropriate questions. The parameter by_unit is included because the user may have
 		selected some exams, but changed their mind and selected questions by unit. The form will say the user
@@ -100,6 +100,8 @@ class Selector(models.Model):
 		:param units: the units the user wants to take
 		:param exams: the exams the user wants to take
 		:param by_unit: if the user choose to get questions by unit or not
+		:param question_limit: upper limit of the number of questions to return
+		:param include_diagrams: if to allow questions that have diagrams
 		"""
 
 		# If the user choose to get questions by unit, filter by unit
@@ -114,13 +116,15 @@ class Selector(models.Model):
 				# TODO refactor this
 				self.questions.set(self.questions.all() | Question.objects.filter(subject=self.subject).filter(year=year, month=month))
 
-		# Used for debugging to limit the number of questions
-		# If there's more questions than we want to give to the user
-		#if self.questions.count() > 50:
-		#	self.questions = self.questions[0:50]
+		# Add filter to excluse diagram questions (if given)
+		if not include_diagrams:
+			self.questions.set(self.questions.filter(diagram=""))
+		# Filter down the total number of questions
+		if self.questions.count() > question_limit:
+			self.questions.set(self.questions.all().order_by("?")[:question_limit])
 
 		# Randomizing the Queryset and storing that random order in pri_keys
-		for q in self.questions.all().order_by("?"):
+		for q in self.questions.all():
 			self.pri_keys += str(q.pk) + ","
 		self.pri_keys = self.pri_keys[0:len(self.pri_keys) - 1]		# Removing trailing ","
 		self.save()			# Saving it
@@ -128,7 +132,7 @@ class Selector(models.Model):
 	# Returns the question with the primary key at the index of index
 	def get_question(self):
 		# Used to tell there are more questions or not
-		if self.questions is None or self.index is None or self.index >= len(self.questions.all()):
+		if self.questions is None or self.index is None or self.index >= self.questions.count():
 			return None
 		index_list = self.pri_keys.split(",")
 		return self.questions.get(pk=index_list[self.index])

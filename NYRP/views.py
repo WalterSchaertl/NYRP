@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 
 from .forms import *
 from .models import Question, Selector
+import random
 
 
 def index(request):
@@ -49,7 +50,10 @@ def prep(request, subject):
 			# Populates the questions based on the user form and how it was submitted
 			select.populate_questions(form.cleaned_data.get("units"),
 									  form.cleaned_data.get("exams"),
-									  "by_unit" in request.POST or "by_unit_pdf" in request.POST)
+									  "by_unit" in request.POST or "by_unit_pdf" in request.POST,
+									  form.cleaned_data.get("max_qs"),
+									  form.cleaned_data.get("diagram_qs")
+									  )
 			# Store the primary key for the selector in the session cookies
 			request.session["sel_pk"] = select.pk
 			# Alerts the user if there aren't any questions for what they selected and retry
@@ -59,6 +63,9 @@ def prep(request, subject):
 				return render(request, "NYRP/prep.html", {"form": form, "title": subject.replace("_", " ")})
 			# If everything was a success, and the user wants a pdf, display that
 			if form.is_pdf:
+				# If to include the anwwer sheet, TODO should this be part of the selector?
+				request.session["with_answer"] = form.cleaned_data.get("with_answer")
+				request.session["exam_with_version"] = form.cleaned_data.get("exam_with_version")
 				return redirect("as_pdf")
 			# Else start displaying the questions
 			return redirect("question")
@@ -164,8 +171,11 @@ def as_pdf(request):
 	context = {
 		"questions": select.questions.all().order_by('?'),
 		"subject": human_readable_subject,
-		"midpoint": (int)(len(select.questions.all()) / 2)
+		"midpoint": (int)(len(select.questions.all()) / 2),
+		"with_answer": request.session["with_answer"],
 	}
+	if request.session["exam_with_version"]:
+		context["exam_with_version"] = "{:04d}".format(random.randrange(0, 1000))
 	return render(request, "NYRP/print_view.html", context=context)
 
 # TODO convert lists to dictionaries to improve readability

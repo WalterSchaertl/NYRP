@@ -190,15 +190,6 @@ class SelectorForm(forms.Form):
 	exams - A multiple choice selection for picking questions based on which exam they appeared on
 	"""
 
-
-	# Both of these fields are overwritten in __init__
-	# TODO so why are they here?
-	units = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHEM_UNITS, required=False)
-	exams = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=CHEM_EXAMS, required=False)
-	# This could possibly be implemented in the future to act as a cap so
-	# the user doesn't get a ridiculous amount of questions they don't want
-	# num_qs= forms.IntegerField(widget=forms.NumberInput, min_value=1)
-
 	# Initialization of the the form
 	def __init__(self, *args, **kwargs):
 		# The request with which the form was submitted
@@ -206,15 +197,22 @@ class SelectorForm(forms.Form):
 		# The subject they user has selected
 		self.subject = kwargs.pop("subject")
 		super(SelectorForm, self).__init__(*args, **kwargs)
+
 		# Picking the correct exam/units based on the subject
 		self.fields["units"] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
 														 choices=eval(self.subject + "_UNITS"), required=False)
 		self.fields["exams"] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
 														 choices=eval(self.subject + "_EXAMS"), required=False)
+		self.fields["max_qs"] = forms.IntegerField(widget=forms.NumberInput, min_value=1, required=False)
+		self.fields["diagram_qs"] = forms.BooleanField(required=False)
+		self.fields["with_answer"] = forms.BooleanField(required=False)
+		self.fields["exam_with_version"] = forms.BooleanField(required=False)
 		self.is_pdf = any("pdf" in key for key in self.req.dict().keys())
 
-	# Checking the form for errors
 	def clean(self):
+		"""
+		Checking the form for errors
+		"""
 		cleaned_data = super(SelectorForm, self).clean()
 		units = cleaned_data.get("units")
 		exams = cleaned_data.get("exams")

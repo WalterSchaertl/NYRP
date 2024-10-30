@@ -28,7 +28,7 @@
 		<div class="row">
 			<div class="col-md-12" style="padding-bottom: 20px;">
 				<h1 class="text-center">
-					New York Regents Exam Question Set for {{subject}}
+					New York Regents Exam Question Set for {{subject}} {{ exam_with_version }}
 				</h1>
 			</div>
 		</div>
@@ -79,10 +79,11 @@
 	<div class="col-md-1"></div>
 </div>
 <div style="break-after:page"></div>
+{% if with_answer %}
 <div class="container-fluid">
 	<div class="col-md-1"></div>
 	<div class="col-md-10">
-		<h1 class="text-center"> Answer Sheet</h1>
+		<h1 class="text-center">Answer Sheet {{ exam_with_version }}</h1>
 		<div class="row">
 			<div class="col-xs-6" style="text-align:center">
 				{% for question in questions %}
@@ -114,11 +115,12 @@
 	</div>
 	<div class="col-md-1"></div>
 </div>
+{% endif %}
 <div style="break-after:page"></div>
 <div class="container-fluid">
 	<div class="col-md-1"></div>
 	<div class="col-md-10">
-				<h1 class="text-center"> Answer Key</h1>
+				<h1 class="text-center">Answer Key {{ exam_with_version }}</h1>
 		<div class="row">
 			<div class="col-xs-6" style="text-align:center">
 				{% for question in questions %}
