@@ -207,6 +207,8 @@ class SelectorForm(forms.Form):
 		self.fields["diagram_qs"] = forms.BooleanField(required=False)
 		self.fields["with_answer"] = forms.BooleanField(required=False)
 		self.fields["exam_with_version"] = forms.BooleanField(required=False)
+		self.fields["fill_in_key"] = forms.BooleanField(required=False)
+		self.fields["max_img_height"] = forms.IntegerField(required=False)
 		self.is_pdf = any("pdf" in key for key in self.req.dict().keys())
 
 	def clean(self):

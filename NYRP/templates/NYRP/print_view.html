@@ -127,10 +127,10 @@
 					{% if forloop.counter <= midpoint %}
 						<div class="row" style="padding-top: 10px"></div>
 						<b>{{forloop.counter}}</b>
-						{% if question.ans|upper == 'A' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">1</span> {% endif %}
-						{% if question.ans|upper == 'B' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">2</span> {% endif %}
-						{% if question.ans|upper == 'C' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">3</span> {% endif %}
-						{% if question.ans|upper == 'D' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">4</span> {% endif %}
+						{% if question.ans|upper == 'A' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">1</span> {% endif %}
+						{% if question.ans|upper == 'B' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">2</span> {% endif %}
+						{% if question.ans|upper == 'C' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">3</span> {% endif %}
+						{% if question.ans|upper == 'D' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">4</span> {% endif %}
 						<div class="row" style="padding-bottom:10px;"></div>
 					{% endif %}
 				{% endfor %}
@@ -140,10 +140,10 @@
 					{% if forloop.counter > midpoint %}
 						<div class="row" style="padding-top: 10px"></div>
 						<b>{{forloop.counter}}</b>
-						{% if question.ans|upper == 'A' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">1</span> {% endif %}
-						{% if question.ans|upper == 'B' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">2</span> {% endif %}
-						{% if question.ans|upper == 'C' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">3</span> {% endif %}
-						{% if question.ans|upper == 'D' %} <span class="answer-filled">X</span> {% else %} <span class="answer-circle">4</span> {% endif %}
+						{% if question.ans|upper == 'A' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">1</span> {% endif %}
+						{% if question.ans|upper == 'B' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">2</span> {% endif %}
+						{% if question.ans|upper == 'C' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">3</span> {% endif %}
+						{% if question.ans|upper == 'D' %} {% if fill_in_key %} <span class="answer-filled">X</span> {% else %}  <span class="answer-circle">X</span> {% endif %} {% else %} <span class="answer-circle">4</span> {% endif %}
 						<div class="row" style="padding-bottom:10px;"></div>
 					{% endif %}
 				{% endfor %}

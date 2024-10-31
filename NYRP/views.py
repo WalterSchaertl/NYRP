@@ -63,9 +63,11 @@ def prep(request, subject):
 				return render(request, "NYRP/prep.html", {"form": form, "title": subject.replace("_", " ")})
 			# If everything was a success, and the user wants a pdf, display that
 			if form.is_pdf:
-				# If to include the anwwer sheet, TODO should this be part of the selector?
+				# TODO should this be part of the selector?
 				request.session["with_answer"] = form.cleaned_data.get("with_answer")
 				request.session["exam_with_version"] = form.cleaned_data.get("exam_with_version")
+				request.session["fill_in_key"] = form.cleaned_data.get("fill_in_key")
+				request.session["max_img_height"] = form.cleaned_data.get("max_img_height")
 				return redirect("as_pdf")
 			# Else start displaying the questions
 			return redirect("question")
@@ -173,6 +175,8 @@ def as_pdf(request):
 		"subject": human_readable_subject,
 		"midpoint": (int)(len(select.questions.all()) / 2),
 		"with_answer": request.session["with_answer"],
+		"fill_in_key": request.session["fill_in_key"],
+		"max_img_height": request.session["max_img_height"]
 	}
 	if request.session["exam_with_version"]:
 		context["exam_with_version"] = "{:04d}".format(random.randrange(0, 1000))
