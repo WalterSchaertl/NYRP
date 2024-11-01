@@ -204,9 +204,11 @@ def view_results(request):
 	trys = [0, 0, 0, 0]		# Holds the data of number or questions answered on the 1st, 2ed, 3rd, and 4th try
 	num_skipped = 0			# The number of questions skipped
 
-	unit_total			= [0 for x in range(num_units)]  # Total number of questions per unit
-	num_miss_by_unit 	= [0 for x in range(num_units)]  # Total number of questions missed by unit
-	num_skiped_by_unit	= [0 for x in range(num_units)]  # Total number of questions skipped by unit
+	unit_total			= [0 for _ in range(num_units)]  # Total number of questions per unit
+	num_miss_by_unit 	= [0 for _ in range(num_units)]  # Total number of questions missed by unit
+	num_skiped_by_unit	= [0 for _ in range(num_units)]  # Total number of questions skipped by unit
+	incorrect_question_pks = []
+	incorrect_answer_history = []
 
 	# For each question history in the records, provided at least one exists, compute the statistics
 	if str(record[0]) != "":
@@ -214,6 +216,7 @@ def view_results(request):
 			data = x.split(" ")
 			q_pk = data[0]												# The question
 			skipped = data[1]											# If it was skipped
+			user_answers = data[2]										# What the user answerd
 			if skipped == "False":										# If it wasn't skipped
 				answers = data[2]										# How it was answered
 			unit_total[Question.objects.get(pk=q_pk).unit - 1] += 1		# Tracking questions by unit
@@ -222,6 +225,11 @@ def view_results(request):
 			if skipped == "False":
 				# Track the number of attempts for each attempt
 				trys[len(answers) - 1] += 1
+				# If it was also incorrect
+				if len(user_answers) > 1:
+					print(q_pk + ": " + user_answers)
+					incorrect_question_pks.append(q_pk)
+					incorrect_answer_history.append(user_answers[:-1])
 			else:
 				num_skipped += 1
 
@@ -241,7 +249,10 @@ def view_results(request):
 	# print("Number of 1st, 2ed, 3rd, 4th tries:  " + str(trys))
 	# print("Total number of questions skipped:   " + str(num_skipped))
 	# print("Percent correct:                     " + str(trys[0] / total * 100))
-	context = {"total"				: total,
+
+	# Questions and answers zipped together because Django doesn't allow variable indexing, this allows iterating both at once
+	context = {	"missed_questions"	: zip(Question.objects.filter(pk__in=incorrect_question_pks).order_by("unit"), incorrect_answer_history),
+				"total"				: total,
 				"total_missed"		: total_missed,
 				"percent_correct"	: int(trys[0] / total * 100),
 				"miss_by_unit"		: num_miss_by_unit,

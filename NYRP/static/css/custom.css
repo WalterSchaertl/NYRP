@@ -13,3 +13,11 @@
     font-size: 12px;
     border : 2px solid black;
 }
+.answer-correct {
+    font-weight:bold;
+    color: #326500;
+}
+.answer-incorrect {
+    font-style:italic;
+    color: #660000;
+}
