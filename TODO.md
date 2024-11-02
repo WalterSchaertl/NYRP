@@ -1,7 +1,7 @@
 # Notes on things to do
 
 ## Fixes before deploying live
-1. description at the end what the units are rather than just numbers
+1. Fix ending elements to start collapsed
 
 ## Features for the future
 1. Customization for tests

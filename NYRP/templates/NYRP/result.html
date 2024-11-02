@@ -55,69 +55,67 @@
                 <p>Congratulations! You got {{trys.0}} out of {{total}} questions correct ({{percent_correct}}%)! You were able to answer {{trys.0}} question(s) on your first try, {{trys.1}} on your second, {{trys.2}} on your third, and {{trys.3}} on your last. You skipped {{total_skipped}} question(s).</p>
                 <h4>How the grading works:</h4>
                 <p>To determine the percentage of questions scored as “correct”, only questions answered on the first attempt are counted. Questions that were skipped, or answered after the first try, are considered incorrect. If you’re using this as a practice and skipped all the units you haven’t covered yet, then the results may be off. </p>
-<!--                 I can't decide if I want this as a show/hide option-->
                 {% if total_missed > 0 %}
-                    <button class="btn btn-primary btn-lg btn-block" name="view_incorrect" data-toggle="collapse" data-target="#viewMissed" >View Incorrect Questions</button>
+                    <button class="btn btn-primary btn-lg btn-block" name="btn_view_incorrect" data-toggle="collapse" data-target="#viewIncorrect">View/Hide Incorrect Questions</button>
+                    <div class="row" id="viewIncorrect">
+                        {% autoescape off %}
+                        <p  class="text-center"> Correct answers are bolded in green, your incorrect answer(s) are italics in red. Skipped questions are not listed.</p>
+                        {% for question, answer_history  in missed_questions %}
+                            <h3>[Unit {{question.unit}}] {{question.question}} </h3>
+                            {% if question.diagram %}
+                                <img src="{% static question.diagram.url %}" alt="Diagram">
+                            {% endif %}
+                            <table style="margin-left:10;margin-right:auto;">
+                              <tr>
+                                  {% if question.ans|upper == 'A' %}
+                                    <td class="answer-correct">(A) {{question.A}}</td>
+                                  {% elif 'a' in answer_history %}
+                                    <td class="answer-incorrect">(A) {{question.A}}</td>
+                                  {% else %}
+                                    <td>(A) {{question.A}}</td>
+                                  {% endif %}
+                              </tr>
+                              <tr>
+                                  {% if question.ans|upper == 'B' %}
+                                    <td class="answer-correct">(B) {{question.B}}</td>
+                                  {% elif 'b' in answer_history %}
+                                    <td class="answer-incorrect">(B) {{question.B}}</td>
+                                  {% else %}
+                                    <td>(B) {{question.B}}</td>
+                                  {% endif %}
+                              </tr>
+                              <tr>
+                                  {% if question.ans|upper == 'C' %}
+                                    <td class="answer-correct">(C) {{question.C}}</td>
+                                  {% elif 'c' in answer_history %}
+                                    <td class="answer-incorrect">(C) {{question.C}}</td>
+                                  {% else %}
+                                    <td>(C) {{question.C}}</td>
+                                  {% endif %}
+                              </tr>
+                              <tr>
+                                  {% if question.ans|upper == 'D' %}
+                                    <td class="answer-correct">(D) {{question.D}}</td>
+                                  {% elif 'd' in answer_history %}
+                                    <td class="answer-incorrect">(D) {{question.D}}</td>
+                                  {% else %}
+                                    <td>(D) {{question.D}}</td>
+                                  {% endif %}
+                              </tr>
+                            </table>
+                        {% endfor %}
+                        {% endautoescape %}
+                    </div>
+                    <button class="btn btn-primary btn-lg btn-block" name="btn_view_units" data-toggle="collapse" data-target="#viewUnits">View/Hide Units</button>
+                    <div class="row" id="viewUnits" style="text-align:center">
+                        {% for unit in units %}
+                        <h3>{{unit.1}} </h3>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </div>
             <div class="col-md-2"></div>
         </div>
-        {% if total_missed > 0 %}
-        <div class="row" id="viewMissed">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                {% autoescape off %}
-<!--                <h1 class="text-center">Incorrect Questions</h1>-->
-                <p  class="text-center"> Correct answers are bolded in green, your incorrect answer(s) are italics in red. Skipped questions are not listed.</p>
-                {% for question, answer_history  in missed_questions %}
-                    <h3>[Unit {{question.unit}}] {{question.question}} </h3>
-                    {% if question.diagram %}
-                        <img src="{% static static_url  %}" alt="Diagram">
-                    {% endif %}
-                    <table style="margin-left:10;margin-right:auto;">
-					  <tr>
-                          {% if question.ans|upper == 'A' %}
-						    <td class="answer-correct">(A) {{question.A}}</td>
-                          {% elif 'a' in answer_history %}
-                            <td class="answer-incorrect">(A) {{question.A}}</td>
-                          {% else %}
-                            <td>(A) {{question.A}}</td>
-                          {% endif %}
-					  </tr>
-					  <tr>
-                          {% if question.ans|upper == 'B' %}
-						    <td class="answer-correct">(B) {{question.B}}</td>
-                          {% elif 'b' in answer_history %}
-                            <td class="answer-incorrect">(B) {{question.B}}</td>
-                          {% else %}
-                            <td>(B) {{question.B}}</td>
-                          {% endif %}
-					  </tr>
-					  <tr>
-                          {% if question.ans|upper == 'C' %}
-						    <td class="answer-correct">(C) {{question.C}}</td>
-                          {% elif 'c' in answer_history %}
-                            <td class="answer-incorrect">(C) {{question.C}}</td>
-                          {% else %}
-                            <td>(C) {{question.C}}</td>
-                          {% endif %}
-					  </tr>
-					  <tr>
-                          {% if question.ans|upper == 'D' %}
-						    <td class="answer-correct">(D) {{question.D}}</td>
-                          {% elif 'd' in answer_history %}
-                            <td class="answer-incorrect">(D) {{question.D}}</td>
-                          {% else %}
-                            <td>(D) {{question.D}}</td>
-                          {% endif %}
-					  </tr>
-					</table>
-                {% endfor %}
-                {% endautoescape %}
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-        {% endif %}
         <div class="row"  style=" padding-bottom: 20px;"><p></p><div>
 	</div>
 </div>

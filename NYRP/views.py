@@ -198,15 +198,15 @@ def view_results(request):
 		return redirect("custom_error")
 
 	record = [x.strip(" ") for x in select.record[:len(select.record) - 2].split(",")]
-	num_units = len(eval(select.subject + "_UNITS"))
+	units = settings.SUPPORTED_TOPICS[select.subject][settings.UNITS]
 	total = len(record)		# The total number of questions
 	total_missed = 0		# Total questions missed
 	trys = [0, 0, 0, 0]		# Holds the data of number or questions answered on the 1st, 2ed, 3rd, and 4th try
 	num_skipped = 0			# The number of questions skipped
 
-	unit_total			= [0 for _ in range(num_units)]  # Total number of questions per unit
-	num_miss_by_unit 	= [0 for _ in range(num_units)]  # Total number of questions missed by unit
-	num_skiped_by_unit	= [0 for _ in range(num_units)]  # Total number of questions skipped by unit
+	unit_total			= [0 for _ in units]  # Total number of questions per unit
+	num_miss_by_unit 	= [0 for _ in units]  # Total number of questions missed by unit
+	num_skiped_by_unit	= [0 for _ in units]  # Total number of questions skipped by unit
 	incorrect_question_pks = []
 	incorrect_answer_history = []
 
@@ -216,9 +216,7 @@ def view_results(request):
 			data = x.split(" ")
 			q_pk = data[0]												# The question
 			skipped = data[1]											# If it was skipped
-			user_answers = data[2]										# What the user answerd
-			if skipped == "False":										# If it wasn't skipped
-				answers = data[2]										# How it was answered
+			answers = data[2] if len(data) > 2 else list()			# What the user answerd
 			unit_total[Question.objects.get(pk=q_pk).unit - 1] += 1		# Tracking questions by unit
 
 			# If the question wasn't skipped
@@ -226,10 +224,9 @@ def view_results(request):
 				# Track the number of attempts for each attempt
 				trys[len(answers) - 1] += 1
 				# If it was also incorrect
-				if len(user_answers) > 1:
-					print(q_pk + ": " + user_answers)
+				if len(answers) > 1:
 					incorrect_question_pks.append(q_pk)
-					incorrect_answer_history.append(user_answers[:-1])
+					incorrect_answer_history.append(answers[:-1])
 			else:
 				num_skipped += 1
 
@@ -252,6 +249,7 @@ def view_results(request):
 
 	# Questions and answers zipped together because Django doesn't allow variable indexing, this allows iterating both at once
 	context = {	"missed_questions"	: zip(Question.objects.filter(pk__in=incorrect_question_pks).order_by("unit"), incorrect_answer_history),
+				"units"				: units,
 				"total"				: total,
 				"total_missed"		: total_missed,
 				"percent_correct"	: int(trys[0] / total * 100),

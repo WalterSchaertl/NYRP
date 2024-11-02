@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "4q(0g93r5v*9^deglxa#@*p)68%wmif=kr1izytss!u0!nu%1+")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -132,6 +132,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 MEDIA_URL = ""
 
+# TODO refactor to a config file or a specific constants file
 # List of subjects implemented or to be implemented
 SUBJECTS = (("CHEM", "Chemistry"),
 			("USHG", "US History And Government"),
@@ -144,9 +145,193 @@ SUBJECTS = (("CHEM", "Chemistry"),
 			("GEOM", "Geometry"),
 			("LIVE", "Living Environment"),
 			("ERRO", "Error: no subject"))
-
+# Those that need reference tables
 REQUIRES_REF_TABLE = ["CHEM", "ESCI", "GEOM", "PHYS"]
-
+# Map of supported exams, units, and years
+# These constants define the units for each topic, as well as which exams there are to select from.
+EXAMS = "EXAMS"
+UNITS = "UNTIS"
+SUPPORTED_TOPICS = {
+	"CHEM": {  # Chemistry
+		EXAMS: (
+			("August 2024", "August 2024"),
+			# TODO June 2024 Chem
+			("January 2024", "January 2024"),
+			("August 2023", "August 2023"),
+			("June 2023", "June 2023"),
+			("January 2023", "January 2023"),
+			("August 2022", "August 2022"),
+			("June 2022", "June 2022"),
+			("June 2017", "June 2017"),
+			("January 2017", "January 2017"),
+			# ("August 2017", "August 2017"),
+			# ("January 2016", "January 2016"),
+			# ("June 2016", "June 2016"),
+			("August 2016", "August 2016"),
+		),
+		UNITS: (
+			("1", "1: The Atom"),
+			("2", "2: Formulas and Equations"),
+			("3", "3: The Mathematics of Formulas and Equations"),
+			("4", "4: Physical Behavior of Matter"),
+			("5", "5: The Periodic Table"),
+			("6", "6: Bonding"),
+			("7", "7: Properties of Solutions"),
+			("8", "8: Kinetics and Equilibrium"),
+			("9", "9: Oxidation-Reduction"),
+			("10", "10: Acids, Bases, and Salts"),
+			("11", "11: Organic Chemistry"),
+			("12", "12: Nuclear Chemistry"),
+		)
+	},
+	# TODO, update units to align with key ideas in https://www.nysed.gov/sites/default/files/programs/standards-instruction/framework-9-12-with-2017-updates.pdf
+	"USHG": {  # United States History and Government
+		EXAMS: (
+			("August 2024", "August 2024"),
+			("June 2024", "June 2024"),
+			("January 2024", "January 2024"),
+			("August 2023", "August 2023"),
+			("June 2023", "June 2023"),
+			("January 2020", "January 2020"),
+			("August 2017", "August 2017"),
+		),
+		UNITS: (
+			("1", "Period 1: 1491–1607"),
+			("2", "Period 2: 1607–1754"),
+			("3", "Period 3: 1754–1800"),
+			("4", "Period 4: 1800–1848"),
+			("5", "Period 5: 1844–1877"),
+			("6", "Period 6: 1865–1898"),
+			("7", "Period 7: 1890–1945"),
+			("8", "Period 8: 1945–1980"),
+			("9", "Period 9: 1980–Present"),
+		)
+	},
+	"ALG1": {  # Algebra I
+		EXAMS: (
+			("August 2024", "August 2024"),
+			("June 2024", "June 2024"),
+			("January 2024", "January 2024"),
+			("August 2023", "August 2023"),
+			("June 2023", "June 2023")
+		),
+		UNITS: (
+			("1", "1: The Real Number System"),
+			("2", "2: Quantities"),
+			("3", "3: Structure in Expressions"),
+			("4", "4: Arithmetic with Polynomials nd Rational Expressions"),
+			("5", "5: Creating Equations"),
+			("6", "6: Reasoning with Questions and Inequalities"),
+			("7", "7: Interpreting Functions"),
+			("8", "8: Building Functions"),
+			("9", "9: Linear, Quadratic, and Exponential Models"),
+			("10", "10: Interpreting Categorical and Quantitative Data")
+		)
+	},
+	"ALG2": {  # Algebra II Common Core
+		EXAMS: (
+			("August 2024", "August 2024"),
+			("June 2024", "June 2024"),
+			("January 2024", "January 2024"),
+			("August 2023", "August 2023"),
+			("June 2023", "June 2023")
+		),
+		UNITS: (
+			("1", "1: The Real Number System"),
+			("2", "2: Quantities"),
+			("3", "3: The Complex Number System"),
+			("4", "4: Seeing Structure in Expressions"),
+			("5", "5: Arithmetic with Polynomials and Rational Expressions"),
+			("6", "6: Creating Equations"),
+			("7", "7: Reasoning with Equations and Inequalities"),
+			("8", "8: Expressing Geometric Properties with Equations"),
+			("9", "9: Interpreting Functions"),
+			("10", "10: Building Functions"),
+			("11", "11: Linear, Quadratic, and Exponential Models "),
+			("12", "12: Trigonometric Functions "),
+			("13", "13: Interpreting categorical and quantitative data "),
+			("14", "14: Making Inferences and Justifying Conclusions"),
+			("15", "15: Conditional Probability and the Rules of Probability ")
+		)
+	},
+	"GHG1": {  # Global History And Geography I
+		EXAMS: (("", ""),),
+		UNITS: (  # This was discontinued in 2018
+			("1", "1: Development of Civilization"),  # 9.1: 10000 BCE to 630 CE
+			("2", "2: The Rise and Impact of Belief Systems"),  # 9.2: 10000 BCE to 630 CE
+			("3", "3: Expansion, Achievement, and Decline of Classical Civilizations"),  # 9.3: 600 BCE to 900 CE
+			("4", "4: Rise of Transregional Trade Networks"),  # 9.4: 500 CD to 1500 CE
+			("5", "5: Political Powers and Achievements"),  # 9.5: 500 CD to 1500 C
+			("6", "6: Social and Cultural Growth and Conflict"),  # 9.5: 500 CD to 1500 C
+			("7", "7: Ottoman Empire and Ming Dynasty Pre-1600"),  # 9.7 1400 CE to 1600 CE
+			("8", "8: Africa and the Americas Pre-1600"),  # 9.8 1325 CE to 1600 CE
+			("9", "9: Transformations of Western Europe and Russia"),  # 9.9 1400 CE to 1750 CE
+			("10", "10: Interactions nad Disruptions")  # 9.10 1400 CE to 1750 CE
+		)
+	},
+	"GHG2": {  # Global History And Geography II
+		EXAMS: (
+			("August 2024", "August 2024"),
+			("June 2024", "June 2024"),
+			("January 2024", "January 2024"),
+			("August 2023", "August 2023"),
+			("June 2023", "June 2023")
+		),
+		UNITS: (
+			("1", "1: The World in 1750"),  # 10.1
+			("2", "2: Enlightenment, Revolution, and Nationalism (1750-1914)"),  # 10.2 (1750-1914)
+			("3", "3: Causes and Effects of the Industrial Revolution (1750-1914)"),  # 10.3 (1750-1914)
+			("4", "4: Imperialism (1750-1914)"),  # 10.4 (1750-1914)
+			("5", "5: Unresolved Global Conflict (1914-1945)"),  # 10.5 (1914-1945)
+			("6", "6: Unresolved Global Conflict (1945-1991)"),  # 10.5 (1945-1991)
+			("7", "7: Decolonization and Nationalism (1900-2000)"),  # 10.7 (1900-2000)
+			("8", "8: Tensions Between Traditional Cultures and Modernization (1945-present)"),  # 10.8 (1945-present)
+			("9", "9: Globalization and a Changing Global Environment (1945-present)"),  # 10.9 (1990-present)
+			("10", "10: Human Rights Violations (1933-present)")  # 10.10 (1948-present)
+		)
+	},
+	"ESCI": {  # Earth Science
+		EXAMS: (
+			("August 2024", "August 2024"),
+			("June 2024", "June 2024"),
+			("January 2024", "January 2024"),
+			("August 2023", "August 2023"),
+			("June 2023", "June 2023")
+		),
+		UNITS: (
+			("1", "1: Introduction to Earth's Changing Environment"),
+			("2", "2: Measuring Earth"),
+			("3", "3: Earth in the Universe"),
+			("4", "4: Motion of Earth, Moon, and Sun"),
+			("5", "5: Energy in Earth Processes"),
+			("6", "6: Insolation and the Seasons"),
+			("7", "7: Weather"),
+			("8", "8: Water and Climate"),
+			("9", "9: Weathering and Erosion"),
+			("10", "10: Deposition"),
+			("11", "11: Earth Materials-Minerals, Rocks, and Mineral Resources"),
+			("12", "12: Earth's Dynamic Crust and Interior"),
+			("13", "13: Interpreting Geologic History"),
+			("14", "14: Landscape Development and Environmental Change"),
+		)
+	},
+	"PHYS": {  # Physics
+		EXAMS: (("", ""),),
+		UNITS: ("", ""),
+	},
+	"GEOM": {  # Geometry
+		EXAMS: (("", ""),),
+		UNITS: ("", ""),
+	},
+	"LIVE": {  # Living Environment
+		EXAMS: (("", ""),),
+		UNITS: ("", ""),
+	},
+	"ERRO": {  # Error
+		EXAMS: (("", ""),),
+		UNITS: ("", ""),
+	},
+}
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
