@@ -86,7 +86,7 @@ class Selector(models.Model):
 	# Used to track the user's record
 	correct = models.BooleanField(default=False)		# If the user answer the current question correctly
 	choice_history = models.TextField(default="")		# What their previous answers were
-	# A list of how the user did on questions in the form of [question's pk, if_skipped, sequence of answers entered]
+	# A list of how the user did on questions in the form of [question's pk, if_skipped, if_correct, sequence of answers entered]
 	# Stored as a string, but can be cast to a list of [int, boolean, string]
 	record = models.TextField(default="")
 

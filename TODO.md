@@ -1,7 +1,7 @@
 # Notes on things to do
 
 ## Fixes before deploying live
-1. Fix ending elements to start collapsed
+1. Clean up selector objects when not needed
 
 ## Features for the future
 1. Customization for tests

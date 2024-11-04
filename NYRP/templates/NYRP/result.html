@@ -38,8 +38,10 @@
             {% else %}
                 <div class="col-md-12">
             {% endif %}
+            {% if not disallow_retry %}
                     <h3 class="text-center">Questions Answered On The ____</h3>
                     <div class = "center" id="piechartAns" style="width: 900px; height: 500px;"></div>
+            {% endif %}
                 </div>
         {% endif %}
         {% if total_skipped > 0 %}
@@ -52,12 +54,12 @@
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <p>Congratulations! You got {{trys.0}} out of {{total}} questions correct ({{percent_correct}}%)! You were able to answer {{trys.0}} question(s) on your first try, {{trys.1}} on your second, {{trys.2}} on your third, and {{trys.3}} on your last. You skipped {{total_skipped}} question(s).</p>
+                <p>Congratulations! You got {{total_correct}} out of {{total}} questions correct ({{percent_correct}}%)! You were able to answer {{trys.0}} question(s) on your first try, {{trys.1}} on your second, {{trys.2}} on your third, and {{trys.3}} on your last. You skipped {{total_skipped}} question(s).</p>
                 <h4>How the grading works:</h4>
                 <p>To determine the percentage of questions scored as “correct”, only questions answered on the first attempt are counted. Questions that were skipped, or answered after the first try, are considered incorrect. If you’re using this as a practice and skipped all the units you haven’t covered yet, then the results may be off. </p>
                 {% if total_missed > 0 %}
                     <button class="btn btn-primary btn-lg btn-block" name="btn_view_incorrect" data-toggle="collapse" data-target="#viewIncorrect">View/Hide Incorrect Questions</button>
-                    <div class="row" id="viewIncorrect">
+                    <div class="collapse" id="viewIncorrect">
                         {% autoescape off %}
                         <p  class="text-center"> Correct answers are bolded in green, your incorrect answer(s) are italics in red. Skipped questions are not listed.</p>
                         {% for question, answer_history  in missed_questions %}
@@ -107,7 +109,7 @@
                         {% endautoescape %}
                     </div>
                     <button class="btn btn-primary btn-lg btn-block" name="btn_view_units" data-toggle="collapse" data-target="#viewUnits">View/Hide Units</button>
-                    <div class="row" id="viewUnits" style="text-align:center">
+                    <div class="collapse" id="viewUnits" style="text-align:center">
                         {% for unit in units %}
                         <h3>{{unit.1}} </h3>
                         {% endfor %}

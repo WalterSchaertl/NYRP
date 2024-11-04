@@ -53,7 +53,7 @@
 					{{ forloop.counter }}. {{question.question}}
 				</h4>
 				{% if question.diagram %}
-					<img src="{% static question.diagram.url %}" alt="Diagram">
+					<img src="{% static question.diagram.url %}" alt="Diagram" style="max-height:{{max_img_height}};margin:auto;display:block;">
 				{% endif %}
 				{% if question.A != "1" and question.A != "(1)" %}
 					<table style="margin-left:10;margin-right:auto;">

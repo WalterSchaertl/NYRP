@@ -70,6 +70,7 @@ def prep(request, subject):
 				request.session["max_img_height"] = form.cleaned_data.get("max_img_height")
 				return redirect("as_pdf")
 			# Else start displaying the questions
+			request.session["disallow_retry"] = form.cleaned_data.get("disallow_retry")
 			return redirect("question")
 		else:
 			errors = form.errors.as_data()
@@ -117,7 +118,7 @@ def question(request):
 		elif "skip" in request.POST:
 			select.index += 1
 			# Add that the user skipped the question
-			select.record += "" + str(question.pk) + " True " + select.choice_history + ", "
+			select.record += "" + str(question.pk) + " True False " + select.choice_history + ", "
 			select.choice_history = ""
 			select.correct = False
 			select.save()
@@ -129,14 +130,27 @@ def question(request):
 			# Adds a record for the question's pk, if it was skipped, and the sequence of answers entered
 			select.choice_history += request.POST.get("answer")
 			select.save()
-			select.record += "" + str(question.pk) + " False " + select.choice_history + ", "
+			select.record += "" + str(question.pk) + " False True " + select.choice_history + ", "
 			select.correct = True
 			select.save()
+			# move on to the next question
+			if request.session["disallow_retry"]:
+				select.index += 1
+				select.choice_history = ""
+				select.correct = False
+				select.save()
 		# Answered incorrectly
 		elif request.POST.get("answer") != "":
 			select.choice_history += request.POST.get("answer")
 			select.correct = False
 			select.save()
+			# move on to the next question
+			if request.session["disallow_retry"]:
+				select.record += "" + str(question.pk) + " False False " + select.choice_history + ", "
+				select.index += 1
+				select.choice_history = ""
+				select.correct = False
+				select.save()
 		return redirect("question")
 
 	ref_table = question.subject + "Ref.pdf" if question.subject in settings.REQUIRES_REF_TABLE else None
@@ -201,6 +215,7 @@ def view_results(request):
 	units = settings.SUPPORTED_TOPICS[select.subject][settings.UNITS]
 	total = len(record)		# The total number of questions
 	total_missed = 0		# Total questions missed
+	total_correct = 0
 	trys = [0, 0, 0, 0]		# Holds the data of number or questions answered on the 1st, 2ed, 3rd, and 4th try
 	num_skipped = 0			# The number of questions skipped
 
@@ -216,7 +231,8 @@ def view_results(request):
 			data = x.split(" ")
 			q_pk = data[0]												# The question
 			skipped = data[1]											# If it was skipped
-			answers = data[2] if len(data) > 2 else list()			# What the user answerd
+			was_correct = data[2]										# If the user got it right
+			answers = data[3] if len(data) > 3 else list()				# What the user answered
 			unit_total[Question.objects.get(pk=q_pk).unit - 1] += 1		# Tracking questions by unit
 
 			# If the question wasn't skipped
@@ -224,14 +240,16 @@ def view_results(request):
 				# Track the number of attempts for each attempt
 				trys[len(answers) - 1] += 1
 				# If it was also incorrect
-				if len(answers) > 1:
+				if was_correct == "False":
 					incorrect_question_pks.append(q_pk)
-					incorrect_answer_history.append(answers[:-1])
+					incorrect_answer_history.append(answers)
+				else:
+					total_correct += 1
 			else:
 				num_skipped += 1
 
 			# If got one wrong or skipped it, register that the unit was in err
-			if skipped == "True" or len(answers) > 1:
+			if skipped == "True" or was_correct == "False":
 				total_missed += 1
 				unit = Question.objects.get(pk=q_pk).unit
 				num_miss_by_unit[unit - 1] += 1
@@ -252,23 +270,14 @@ def view_results(request):
 				"units"				: units,
 				"total"				: total,
 				"total_missed"		: total_missed,
-				"percent_correct"	: int(trys[0] / total * 100),
+				"total_correct"		: total_correct,
+				"percent_correct"	: int(total_correct / total * 100),
+				"disallow_retry"	: request.session["disallow_retry"],
 				"miss_by_unit"		: num_miss_by_unit,
 				"trys"				: trys,
 				"total_skipped"		: num_skipped,
 				"num_skiped_by_unit": num_skiped_by_unit}
 	return render(request, "NYRP/result.html", context)
-
-
-def make_qs(request):
-	"""
-	For ease of database population, makes question models in large batches\
-	"""
-
-	for i in range(0, 20):
-		question = Question.objects.create(subject="CHEM", month="January", year=2017, unit=12)
-		question.save()
-	return HttpResponse("made.")
 
 
 def question_bug_report(request):
