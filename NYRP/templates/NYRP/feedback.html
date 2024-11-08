@@ -1,0 +1,150 @@
+{% extends "NYRP/base.html" %}
+{% load static %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-4">
+            <h1 style="text-align:center">Submit Feedback</h1>
+            <form>
+                <h2 style="text-align:center">New Features</h2>
+                <p style="text-align:justify">
+                    If you'd like to leave feedback, or vote on the priority of future features, please do so below!
+                    From the options listed below, rank each with what you'd like to see the most where 1 is the most
+                    important, 3 is the least, and "---" is no preference. Ties are allowed.
+                </p>
+                <div class="row">
+                    <div class="col-md-2" style="text-align:center">
+                        <h2>Rank</h2>
+                    </div>
+                    <div class="col-md-10">
+                        <h2>Option</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" style="padding-top: 16px; padding-bottom: 11px;">
+                        <select class="form-control" id="priority_more_subjects" >
+                            <option>---</option><option>1</option><option>2</option><option>3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10" style="padding-bottom: 5px;">
+                        <h3>Adding more subjects</h3>
+                        <div class="row collapse" id="which_more_subjects" style="padding-left: 15px;">
+                            <label>Please select which subject you'd like to see added</label>
+                            <select class="form-control">
+                                <option>Physics</option><option>Geometry</option><option>Living Environment</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" style="padding-top: 16px; padding-bottom: 11px;">
+                        <select class="form-control" id="priority_more_exams" >
+                            <option>---</option><option>1</option><option>2</option><option>3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10" style="padding-bottom: 5px;">
+                        <h3>Adding more exams for current subjects</h3>
+                        <div class="row collapse" id="which_more_exams" style="padding-left: 15px;">
+                            <label>Please select which subject you'd like to see more exams for</label>
+                            <select class="form-control">
+                                <option>Chemistry</option><option>US History & Government</option><option>Algebra I</option>
+                                <option>Global History & Geography II</option><option>Earth Science</option><option>Algebra II</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" style="padding-top: 16px; padding-bottom: 11px;">
+                        <select class="form-control" id="priority_more_customization" >
+                            <option>---</option><option>1</option><option>2</option><option>3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10" style="padding-bottom: 5px;">
+                        <h3>More customization when selecting questions</h3>
+                        <div class="row collapse" id="which_more_customization" style="padding-left: 15px;">
+                            <label>Please add details about the type of customization you'd like to see</label>
+                            <textarea class="form-control" id="text_more_customization" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" style="padding-top: 16px; padding-bottom: 11px;">
+                        <select class="form-control" id="priority_better_UI">
+                            <option>---</option><option>1</option><option>2</option><option>3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10" style="padding-bottom: 5px;">
+                        <h3>UI/UX Improvements</h3>
+                        <div class="row collapse" id="which_better_UI" style="padding-left: 15px;">
+                            <label>Please add details about the type of UI improvements you'd like to see</label>
+                            <textarea class="form-control" id="text_better_UI" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" style="padding-top: 16px; padding-bottom: 11px;">
+                        <select class="form-control" id="priority_extended_response" >
+                            <option>---</option><option>1</option><option>2</option><option>3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10" style="padding-bottom: 5px;">
+                        <h3>Add extended response questions</h3>
+                        <div class="row collapse" id="which_extended_response" style="padding-left: 15px;">
+                            <label>Please select which subject you'd like to see extended responses for most</label>
+                            <select class="form-control">
+                                <option>Chemistry</option><option>US History & Government</option><option>Algebra I</option>
+                                <option>Global History & Geography II</option><option>Earth Science</option><option>Algebra II</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2" style="padding-top: 16px; padding-bottom: 11px;">
+                        <select class="form-control" id="priority_other">
+                            <option>---</option><option>1</option><option>2</option><option>3</option>
+                        </select>
+                    </div>
+                    <div class="col-md-10" style="padding-bottom: 5px;">
+                        <h3>Other</h3>
+                        <div class="row collapse" id="which_other" style="padding-left: 15px;">
+                            <label>Please add details</label>
+                            <textarea class="form-control" id="text_other" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <h2 style="text-align:center">Other Feedback</h2>
+                <p>
+                    Please add any other feedback you have here
+                </p>
+                <textarea class="form-control" id="text_misc" rows="3"></textarea>
+                <input class="btn btn-lg btn-block btn-primary" type="submit" name="by_unit" value="Submit Feedback" >
+            </form>
+        </div>
+        <div class="col-md-4">
+        </div>
+    </div>
+    <!-- Script to collapse the selections -->
+    <script type="text/javascript">
+    var coll = document.getElementsByClassName("collapse");
+    for(i = 0; i < coll.length; i++) {
+        let baseStr = coll[i].id.substring(coll[i].id.indexOf("_"));
+        // If clicked refresh, load the slide up/down
+        if(document.getElementById("priority" + baseStr).value == "---") {
+            $("#which" + baseStr).slideUp();
+        } else {
+            $("#which" + baseStr).slideDown();
+        }
+        // If clicked, run the slide up/down
+        document.getElementById("priority" + baseStr).addEventListener("input", function(e) {
+            if(e.target.value == "---") {
+                $("#which" + baseStr).slideUp();
+            } else {
+                $("#which" + baseStr).slideDown();
+            }
+        });
+    }
+    </script>
+</div>
+{% endblock %}

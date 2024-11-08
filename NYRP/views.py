@@ -339,3 +339,10 @@ def about_site(request):
 	:return: A HTTPResponse object, the rendering of the about.htm
 	"""
 	return render(request, "NYRP/about.html")
+
+
+def feedback(request):
+	"""
+	Get feedback from the user
+	"""
+	return render(request, "NYRP/feedback.html")
