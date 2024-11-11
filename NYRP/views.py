@@ -345,4 +345,23 @@ def feedback(request):
 	"""
 	Get feedback from the user
 	"""
-	return render(request, "NYRP/feedback.html")
+	if request.method == "POST":
+		form = FeedbackForm(request.POST, req=request.POST)
+		if form.is_valid():
+			feedback_obj = Feedback.objects.create()
+			feedback_obj.set_data(form.cleaned_data.get("new_feature_requests"), form.cleaned_data.get("misc_feedback"))
+			messages.info(request, "Your feedback has been accepted!")
+			return render(request, "NYRP/index.html")
+		else:
+			for error_messages in form.errors.as_data().values():
+				for error in error_messages:
+					messages.error(request, error.message)
+	else:
+		form = FeedbackForm(req=request.POST)
+	context = {
+		"form": form,
+		"priorities": FeedbackForm.PRIORITIES,  # [human_name for _, human_name in FeedbackForm.PRIORITIES],
+		"features": FeedbackForm.FEATURE_CHOICES
+	}
+
+	return render(request, "NYRP/feedback.html", context)

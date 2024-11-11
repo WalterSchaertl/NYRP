@@ -1,3 +1,4 @@
+from django.utils.timezone import now
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
@@ -82,6 +83,7 @@ class Selector(models.Model):
 	index = models.IntegerField(default=0)							# Used to iterate through the questions
 	questions = models.ManyToManyField(Question)					# All the questions matching the user's criteria
 	pri_keys = models.CharField(max_length=1000, default="")		# A list of the primary keys in questions
+	created_on = models.DateTimeField(auto_now_add=True)			# way to age out selectors
 
 	# Used to track the user's record
 	correct = models.BooleanField(default=False)		# If the user answer the current question correctly
@@ -159,3 +161,26 @@ class QuestionBug(models.Model):
 	def __str__(self):
 		return "Bug: " + str(self.pk) + " with question " + str(self.question.pk) + \
 			   ": " + str(self.get_bug_choices_display())
+
+
+class Feedback(models.Model):
+	"""
+	Used for user feedback about misc bugs and the desired future state of the project
+	"""
+	created_on = models.DateTimeField(auto_now_add=True)
+	new_feature_requests = models.JSONField(default=list, blank=True)
+	misc_feedback = models.TextField(blank=True, max_length=500)
+
+	def __str__(self):
+		ret = str(self.created_on.date())
+		if self.new_feature_requests is not None and len(self.new_feature_requests) > 0:
+			ret += " | " + str([feature["name"] for feature in sorted(self.new_feature_requests, key=lambda item: item["rank"])])
+		print(self.misc_feedback)
+		if self.misc_feedback is not None and len(self.misc_feedback) > 0:
+			ret += " | " + self.misc_feedback[0:50]
+		return ret
+
+	def set_data(self, new_features: list, misc_feedback: str) -> None:
+		self.new_feature_requests = new_features
+		self.misc_feedback = misc_feedback
+		self.save()

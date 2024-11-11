@@ -170,5 +170,29 @@
 			<!--<div><h1>Find a bug? Want a new feature? Leave a Message!</h1></div>-->
 		</div>
 	</div>
+	</script>
+    <!--Popup for Messages-->
+	{% if messages %}
+		<div id="errorMessage" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+			<div class="modal-content">
+			  <div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 style="text-align:center">{% for message in messages %}{{ message }}{% endfor %}</h4>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<!--Small local javascript to run the modal-->
+		<script type="text/javascript">
+			$(window).on("load",function(){
+				$("#errorMessage").modal("show");
+				// Show the error for five seconds
+				myModalTimeout = setTimeout(function() {
+					$("#errorMessage").modal("hide");
+				}, 5000);
+			});
+		</script>
+	{% endif %}
 </div>
 {% endblock %}
