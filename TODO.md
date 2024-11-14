@@ -14,3 +14,8 @@
    1. Search for keywords
    2. Remove question from selection and get a new one
    3. Extended response questions
+
+## Post-live fixes
+1. Add  robot.txt
+2. Fix chem.jpg and ag2.jpg lower cased names
+3. Old diagram names have uppercase extensions, should be lower

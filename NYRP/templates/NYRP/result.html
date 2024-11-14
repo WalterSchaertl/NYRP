@@ -65,7 +65,7 @@
                         {% for question, answer_history  in missed_questions %}
                             <h3>[Unit {{question.unit}}] {{question.question}} </h3>
                             {% if question.diagram %}
-                                <img src="{% static question.diagram.url %}" alt="Diagram">
+                                <img src="{% static question.diagram.url|slice:"1:" %}" alt="Diagram">
                             {% endif %}
                             <table style="margin-left:10;margin-right:auto;">
                               <tr>
