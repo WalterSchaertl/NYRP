@@ -119,8 +119,8 @@ USE_L10N = True
 USE_TZ = True
 
 # These three
-#CSRF_COOKIE_SECURE = True
-#SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 #X_FRAME_OPTIONS = "DENY"
 
 # Static files (CSS, JavaScript, Images)
