@@ -7,7 +7,7 @@ by the topic it covers. Unlimited attempts are allowed per question so
 students can get immediate feedback. After answering all questions or
 ending the test at any point, more in-dept analysis is provided giving
 students feedback on their best and worst topics. The live version
-can be found here: https://regents-prep.herokuapp.com/NYRP/
+can be found here: https://schaertlw.pythonanywhere.com/NYRP/
 
 ## 3rd Party Libraries
 - BootStrap:  3.3.5
@@ -34,5 +34,5 @@ If desired to run as a container, a Dockerfile and docker-compse.yml are provide
 * https://www.nysedregents.org/ for exams
 * https://www.pixabay.com for images
 * https://www.nysed.gov and _Prentice Hall Brief Review_ for unit break down
-* https://www.layoutit.com for base webste layout
+* https://www.layoutit.com for base website layout
 * https://www.bootstraptoggle.com/ for custom toggles 
